@@ -56,8 +56,6 @@
 //       const credentialUrl = formData.get("credentialUrl");
 //       const description = formData.get("description");
 
-      
-
 //       // Validate inputs
 //       if (!specialty ||!phone ||!qualifications || !experience || !credentialUrl || !description) {
 //         throw new Error("All fields are required");
@@ -116,7 +114,7 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function setUserRole(formData) {
@@ -128,7 +126,9 @@ export async function setUserRole(formData) {
     // when the session cookie hasn't been propagated yet. Return a
     // structured response so the client can redirect to sign-in instead
     // of throwing an error that surfaces only as a digest in prod.
-    console.warn("Onboarding: unauthenticated setUserRole call — prompting sign-in");
+    console.warn(
+      "Onboarding: unauthenticated setUserRole call — prompting sign-in"
+    );
     return { success: false, redirect: "/sign-in?redirectTo=/onboarding" };
   }
 
@@ -138,12 +138,22 @@ export async function setUserRole(formData) {
   }
 
   // 🔥 UPSERT USER (MAIN FIX)
+  // Ensure we store the user's email (required by Prisma schema)
+  const clerk = await currentUser();
+  const email = clerk?.emailAddresses?.[0]?.emailAddress;
+
+  if (!email) {
+    console.warn("Onboarding: Clerk did not return an email for user", userId);
+    throw new Error("Missing email from authentication provider");
+  }
+
   const user = await db.user.upsert({
     where: { clerkUserId: userId },
     update: {},
     create: {
       clerkUserId: userId,
       role: "PATIENT", // temporary default
+      email,
     },
   });
 
@@ -165,7 +175,13 @@ export async function setUserRole(formData) {
   const description = formData.get("description")?.toString();
   const experience = Number(formData.get("experience"));
 
-  if (!specialty || !phone || !credentialUrl || !description || isNaN(experience)) {
+  if (
+    !specialty ||
+    !phone ||
+    !credentialUrl ||
+    !description ||
+    isNaN(experience)
+  ) {
     throw new Error("All fields are required");
   }
 
