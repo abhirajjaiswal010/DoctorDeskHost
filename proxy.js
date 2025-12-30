@@ -60,6 +60,8 @@
 //     "/(api|trpc)(.*)",
 //   ],
 // };
+// 
+
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -73,8 +75,10 @@ const isProtectedRoute = createRouteMatcher([
 export default clerkMiddleware((auth, req) => {
   const { userId } = auth();
 
+  // 🔐 Not logged in → manual redirect
   if (!userId && isProtectedRoute(req)) {
-    return auth().redirectToSignIn();
+    const signInUrl = new URL("/sign-in", req.url);
+    return NextResponse.redirect(signInUrl);
   }
 
   return NextResponse.next();
