@@ -18,9 +18,17 @@ if (!process.env.VONAGE_PRIVATE_KEY) {
   throw new Error("VONAGE_PRIVATE_KEY is missing in environment variables");
 }
 
+// const vonage = new Vonage({
+//   applicationId: process.env.VONAGE_APPLICATION_ID,
+//   privateKey: process.env.VONAGE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+// });
+const VONAGE_PRIVATE_KEY = process.env.VONAGE_PRIVATE_KEY
+  .replace(/\\n/g, "\n")
+  .trim();
+
 const vonage = new Vonage({
   applicationId: process.env.VONAGE_APPLICATION_ID,
-  privateKey: process.env.VONAGE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  privateKey: VONAGE_PRIVATE_KEY,
 });
 
 
