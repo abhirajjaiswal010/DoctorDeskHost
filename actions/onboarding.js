@@ -225,135 +225,61 @@
 //     return null;
 //   }
 // }
+// 
+
 "use server";
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 
-/**
- * Ensure DB user exists (Email + Google safe)
- */
-async function getOrCreateDbUser(clerkUserId) {
+export async function setUserRole(formData) {
+  const { userId } = auth();
+  if (!userId) return { redirect: "/sign-in" };
+
+  const role = formData.get("role");
+
   let user = await db.user.findUnique({
-    where: { clerkUserId },
+    where: { clerkUserId: userId },
   });
 
   if (!user) {
     user = await db.user.create({
-      data: {
-        clerkUserId,
-        role: "PATIENT", // default role
-      },
+      data: { clerkUserId: userId, role: "PATIENT" },
     });
   }
 
-  return user;
-}
-
-/**
- * Set user role during onboarding
- */
-export async function setUserRole(formData) {
-  const { userId } = auth(); // ✅ NEVER await auth()
-
-  // 🔐 Not logged in
-  if (!userId) {
-    return { success: false, redirect: "/sign-in" };
+  if (role === "PATIENT") {
+    await db.user.update({
+      where: { clerkUserId: userId },
+      data: { role: "PATIENT" },
+    });
+    return { redirect: "/doctors" };
   }
 
-  const role = formData.get("role");
-
-  if (!role || !["PATIENT", "DOCTOR"].includes(role)) {
-    return { success: false, message: "Invalid role selected" };
-  }
-
-  try {
-    // ✅ Make sure DB user exists
-    await getOrCreateDbUser(userId);
-
-    /* ================= PATIENT ================= */
-    if (role === "PATIENT") {
-      await db.user.update({
-        where: { clerkUserId: userId },
-        data: { role: "PATIENT" },
-      });
-
-      revalidatePath("/");
-      return { success: true, redirect: "/doctors" };
-    }
-
-    /* ================= DOCTOR ================= */
-    const specialty = formData.get("specialty");
-    const phone = formData.get("phone");
-    const credentialUrl = formData.get("credentialUrl");
-    const description = formData.get("description");
-    const experience = Number(formData.get("experience"));
-
-    let qualifications = [];
-    const rawQualifications = formData.get("qualifications");
-
-    if (rawQualifications) {
-      try {
-        qualifications = JSON.parse(rawQualifications);
-      } catch {
-        return {
-          success: false,
-          message: "Invalid qualifications format",
-        };
-      }
-    }
-
-    if (
-      !specialty ||
-      !phone ||
-      !credentialUrl ||
-      !description ||
-      isNaN(experience)
-    ) {
-      return { success: false, message: "All fields are required" };
-    }
-
+  if (role === "DOCTOR") {
     await db.user.update({
       where: { clerkUserId: userId },
       data: {
         role: "DOCTOR",
-        specialty,
-        phone,
-        qualifications,
-        experience,
-        credentialUrl,
-        description,
-        verificationStatus: "PENDING",
+        specialty: formData.get("specialty"),
+        phone: formData.get("phone"),
+        qualifications: JSON.parse(formData.get("qualifications") || "[]"),
+        experience: Number(formData.get("experience")),
+        credentialUrl: formData.get("credentialUrl"),
+        description: formData.get("description"),
       },
     });
-    
-
-    revalidatePath("/");
-    return { success: true, redirect: "/doctor/verification" };
-  } catch (error) {
-    console.error("❌ Onboarding error:", error);
-    return {
-      success: false,
-      message: "Failed to complete onboarding",
-    };
+    return { redirect: "/doctor" };
   }
+
+  return {};
 }
 
-/**
- * Get current logged-in user from DB
- */
 export async function getCurrentUser() {
-  const { userId } = auth(); // ✅ NO await
-
+  const { userId } = auth();
   if (!userId) return null;
 
-  try {
-    return await db.user.findUnique({
-      where: { clerkUserId: userId },
-    });
-  } catch (error) {
-    console.error("Failed to get user information:", error);
-    return null;
-  }
+  return db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
 }
