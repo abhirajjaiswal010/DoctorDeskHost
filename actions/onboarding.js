@@ -1,123 +1,123 @@
-"use server";
+// "use server";
 
-import { db } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
+// import { db } from "@/lib/prisma";
+// import { auth } from "@clerk/nextjs/server";
+// import { revalidatePath } from "next/cache";
 
-/**
- * Sets the user's role and related information
- */
-export async function setUserRole(formData) {
-  const { userId } = await auth();
+// /**
+//  * Sets the user's role and related information
+//  */
+// export async function setUserRole(formData) {
+//   const { userId } = await auth();
 
-  if (!userId) {
-    console.warn("Onboarding: unauthorized access to setUserRole");
-    throw new Error("Unauthorized");
-  }
+//   if (!userId) {
+//     console.warn("Onboarding: unauthorized access to setUserRole");
+//     throw new Error("Unauthorized");
+//   }
 
-  // Find user in our database
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
+//   // Find user in our database
+//   const user = await db.user.findUnique({
+//     where: { clerkUserId: userId },
+//   });
 
-  if (!user) throw new Error("User not found in database");
+//   if (!user) throw new Error("User not found in database");
 
-  const role = formData.get("role");
+//   const role = formData.get("role");
 
-  if (!role || !["PATIENT", "DOCTOR"].includes(role)) {
-    throw new Error("Invalid role selection");
-  }
+//   if (!role || !["PATIENT", "DOCTOR"].includes(role)) {
+//     throw new Error("Invalid role selection");
+//   }
 
-  try {
-    // For patient role - simple update
-    if (role === "PATIENT") {
-      await db.user.update({
-        where: {
-          clerkUserId: userId,
-        },
-        data: {
-          role: "PATIENT",
-        },
-      });
+//   try {
+//     // For patient role - simple update
+//     if (role === "PATIENT") {
+//       await db.user.update({
+//         where: {
+//           clerkUserId: userId,
+//         },
+//         data: {
+//           role: "PATIENT",
+//         },
+//       });
 
-      revalidatePath("/");
-      return { success: true, redirect: "/doctors" };
-    }
+//       revalidatePath("/");
+//       return { success: true, redirect: "/doctors" };
+//     }
 
-    // For doctor role - need additional information
-    if (role === "DOCTOR") {
-      const specialty = formData.get("specialty");
-      const phone = formData.get("phone");
-      const qualificationsRaw = formData.get("qualifications");
-      const qualifications = qualificationsRaw
-        ? JSON.parse(qualificationsRaw)
-        : [];
+//     // For doctor role - need additional information
+//     if (role === "DOCTOR") {
+//       const specialty = formData.get("specialty");
+//       const phone = formData.get("phone");
+//       const qualificationsRaw = formData.get("qualifications");
+//       const qualifications = qualificationsRaw
+//         ? JSON.parse(qualificationsRaw)
+//         : [];
 
-      const experience = parseInt(formData.get("experience"), 10);
-      const credentialUrl = formData.get("credentialUrl");
-      const description = formData.get("description");
+//       const experience = parseInt(formData.get("experience"), 10);
+//       const credentialUrl = formData.get("credentialUrl");
+//       const description = formData.get("description");
 
-      // Validate inputs
-      if (
-        !specialty ||
-        !phone ||
-        !qualifications ||
-        !experience ||
-        !credentialUrl ||
-        !description
-      ) {
-        throw new Error("All fields are required");
-      }
+//       // Validate inputs
+//       if (
+//         !specialty ||
+//         !phone ||
+//         !qualifications ||
+//         !experience ||
+//         !credentialUrl ||
+//         !description
+//       ) {
+//         throw new Error("All fields are required");
+//       }
 
-      await db.user.update({
-        where: {
-          clerkUserId: userId,
-        },
-        data: {
-          role: "DOCTOR",
-          specialty,
-          phone,
-          qualifications,
+//       await db.user.update({
+//         where: {
+//           clerkUserId: userId,
+//         },
+//         data: {
+//           role: "DOCTOR",
+//           specialty,
+//           phone,
+//           qualifications,
 
-          experience,
-          credentialUrl,
-          description,
-          verificationStatus: "PENDING",
-        },
-      });
+//           experience,
+//           credentialUrl,
+//           description,
+//           verificationStatus: "PENDING",
+//         },
+//       });
 
-      revalidatePath("/");
-      return { success: true, redirect: "/doctor/verification" };
-    }
-  } catch (error) {
-    console.error("Failed to set user role:", error);
-    throw new Error(`Failed to update user profile: ${error.message}`);
-  }
-}
+//       revalidatePath("/");
+//       return { success: true, redirect: "/doctor/verification" };
+//     }
+//   } catch (error) {
+//     console.error("Failed to set user role:", error);
+//     throw new Error(`Failed to update user profile: ${error.message}`);
+//   }
+// }
 
-/**
- * Gets the current user's complete profile information
- */
-export async function getCurrentUser() {
-  const { userId } = await auth();
+// /**
+//  * Gets the current user's complete profile information
+//  */
+// export async function getCurrentUser() {
+//   const { userId } = await auth();
 
-  if (!userId) {
-    return null;
-  }
+//   if (!userId) {
+//     return null;
+//   }
 
-  try {
-    const user = await db.user.findUnique({
-      where: {
-        clerkUserId: userId,
-      },
-    });
+//   try {
+//     const user = await db.user.findUnique({
+//       where: {
+//         clerkUserId: userId,
+//       },
+//     });
 
-    return user;
-  } catch (error) {
-    console.error("Failed to get user information:", error);
-    return null;
-  }
-}
+//     return user;
+//   } catch (error) {
+//     console.error("Failed to get user information:", error);
+//     return null;
+//   }
+// }
 
 // "use server";
 
@@ -225,123 +225,134 @@ export async function getCurrentUser() {
 //     return null;
 //   }
 // }
-// "use server";
+"use server";
 
-// import { db } from "@/lib/prisma";
-// import { auth } from "@clerk/nextjs/server";
-// import { revalidatePath } from "next/cache";
+import { db } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
-// /**
-//  * Ensure DB user exists (Google + Email safe)
-//  */
-// async function getOrCreateDbUser(clerkUserId) {
-//   let user = await db.user.findUnique({
-//     where: { clerkUserId },
-//   });
+/**
+ * Ensure DB user exists (Email + Google safe)
+ */
+async function getOrCreateDbUser(clerkUserId) {
+  let user = await db.user.findUnique({
+    where: { clerkUserId },
+  });
 
-//   if (!user) {
-//     user = await db.user.create({
-//       data: {
-//         clerkUserId,
-//         role: "PATIENT",
-//       },
-//     });
-//   }
+  if (!user) {
+    user = await db.user.create({
+      data: {
+        clerkUserId,
+        role: "PATIENT", // default role
+      },
+    });
+  }
 
-//   return user;
-// }
+  return user;
+}
 
-// export async function setUserRole(formData) {
-//   const { userId } = auth(); // ✅ NO await
+/**
+ * Set user role during onboarding
+ */
+export async function setUserRole(formData) {
+  const { userId } = auth(); // ✅ NEVER await auth()
 
-//   // 🔐 Handle unauth safely
-//   if (!userId) {
-//     return { success: false, redirect: "/sign-in" };
-//   }
+  // 🔐 Not logged in
+  if (!userId) {
+    return { success: false, redirect: "/sign-in" };
+  }
 
-//   const role = formData.get("role");
+  const role = formData.get("role");
 
-//   if (!role || !["PATIENT", "DOCTOR"].includes(role)) {
-//     return { success: false, message: "Invalid role selected" };
-//   }
+  if (!role || !["PATIENT", "DOCTOR"].includes(role)) {
+    return { success: false, message: "Invalid role selected" };
+  }
 
-//   try {
-//     await getOrCreateDbUser(userId);
+  try {
+    // ✅ Make sure DB user exists
+    await getOrCreateDbUser(userId);
 
-//     /* ============ PATIENT ============ */
-//     if (role === "PATIENT") {
-//       await db.user.update({
-//         where: { clerkUserId: userId },
-//         data: { role: "PATIENT" },
-//       });
+    /* ================= PATIENT ================= */
+    if (role === "PATIENT") {
+      await db.user.update({
+        where: { clerkUserId: userId },
+        data: { role: "PATIENT" },
+      });
 
-//       revalidatePath("/");
-//       return { success: true, redirect: "/doctors" };
-//     }
+      revalidatePath("/");
+      return { success: true, redirect: "/doctors" };
+    }
 
-//     /* ============ DOCTOR ============ */
-//     const specialty = formData.get("specialty");
-//     const phone = formData.get("phone");
-//     const credentialUrl = formData.get("credentialUrl");
-//     const description = formData.get("description");
-//     const experience = Number(formData.get("experience"));
+    /* ================= DOCTOR ================= */
+    const specialty = formData.get("specialty");
+    const phone = formData.get("phone");
+    const credentialUrl = formData.get("credentialUrl");
+    const description = formData.get("description");
+    const experience = Number(formData.get("experience"));
 
-//     let qualifications = [];
-//     const rawQualifications = formData.get("qualifications");
+    let qualifications = [];
+    const rawQualifications = formData.get("qualifications");
 
-//     if (rawQualifications) {
-//       try {
-//         qualifications = JSON.parse(rawQualifications);
-//       } catch {
-//         return { success: false, message: "Invalid qualifications format" };
-//       }
-//     }
+    if (rawQualifications) {
+      try {
+        qualifications = JSON.parse(rawQualifications);
+      } catch {
+        return {
+          success: false,
+          message: "Invalid qualifications format",
+        };
+      }
+    }
 
-//     if (
-//       !specialty ||
-//       !phone ||
-//       !credentialUrl ||
-//       !description ||
-//       isNaN(experience)
-//     ) {
-//       return { success: false, message: "All fields are required" };
-//     }
+    if (
+      !specialty ||
+      !phone ||
+      !credentialUrl ||
+      !description ||
+      isNaN(experience)
+    ) {
+      return { success: false, message: "All fields are required" };
+    }
 
-//     await db.user.update({
-//       where: { clerkUserId: userId },
-//       data: {
-//         role: "DOCTOR",
-//         specialty,
-//         phone,
-//         qualifications,
-//         experience,
-//         credentialUrl,
-//         description,
-//         verificationStatus: "PENDING",
-//       },
-//     });
+    await db.user.update({
+      where: { clerkUserId: userId },
+      data: {
+        role: "DOCTOR",
+        specialty,
+        phone,
+        qualifications,
+        experience,
+        credentialUrl,
+        description,
+        verificationStatus: "PENDING",
+      },
+    });
 
-//     revalidatePath("/");
-//     return { success: true, redirect: "/doctor/verification" };
-//   } catch (err) {
-//     console.error("Onboarding error:", err);
-//     return { success: false, message: "Onboarding failed" };
-//   }
-// }
-// export async function getCurrentUser() {
-//   const { userId } = auth(); // NOT await
+    revalidatePath("/");
+    return { success: true, redirect: "/doctor/verification" };
+  } catch (error) {
+    console.error("❌ Onboarding error:", error);
+    return {
+      success: false,
+      message: "Failed to complete onboarding",
+    };
+  }
+}
 
-//   if (!userId) return null;
+/**
+ * Get current logged-in user from DB
+ */
+export async function getCurrentUser() {
+  const { userId } = auth(); // ✅ NO await
 
-//   try {
-//     const user = await db.user.findUnique({
-//       where: {
-//         clerkUserId: userId,
-//       },
-//     });
-//     return user;
-//   } catch (error) {
-//     console.error("Failed to get user information:", error);
-//     return null;
-//   }
-// }
+  if (!userId) return null;
+
+  try {
+    return await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+  } catch (error) {
+    console.error("Failed to get user information:", error);
+    return null;
+  }
+}
