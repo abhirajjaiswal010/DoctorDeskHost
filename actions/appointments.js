@@ -1,4 +1,4 @@
-export const runtime = "nodejs";
+
 "use server"
 import { VerificationStatus } from "@/lib/generated/prisma/enums";
 import { db } from "@/lib/prisma";
