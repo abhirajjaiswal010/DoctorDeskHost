@@ -10,7 +10,7 @@ import { auth } from "@clerk/nextjs/server";
 // Initialize Vonage Video API client
 const vonage = new Vonage({
   applicationId: process.env.VONAGE_APPLICATION_ID,      // Server-only
-  privateKey: process.env.VONAGE_PRIVATE_KEY,            // Server-only
+  privateKey: process.env.VONAGE_PRIVATE_KEY.replace(/\\n/g, "\n"),            // Server-only
 });
 
 
