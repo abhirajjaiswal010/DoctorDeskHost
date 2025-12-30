@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import Footer from "@/components/footer"; // ✅ ADD THIS
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 
 import { CreditsProvider } from "@/context/CreditsContext";
 import Script from "next/script";
@@ -69,6 +70,7 @@ export default async function RootLayout({ children }) {
 
           {/* Razorpay Checkout Script */}
           <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
