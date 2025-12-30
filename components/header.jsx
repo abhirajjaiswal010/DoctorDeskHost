@@ -21,11 +21,14 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
-export const Header = ({ user }) => {
+export const Header = () => {
+  const { user, role, isLoaded } = useCurrentUser();
+
   const [isMobile, setIsMobile] = useState(false);
   const { credits } = useCredits();
-
+ 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768); // md breakpoint
@@ -160,7 +163,7 @@ const DesktopHeader = ({ user, credits }) => (
     {/* ================= RIGHT : Actions ================= */}
     <div className="flex items-center gap-3">
       {/* Role Buttons */}
-      {user?.role === "ADMIN" && (
+      {role === "ADMIN" && (
         <Link href="/admin">
           <Button variant="outline" size="sm">
             Admin Dashboard
@@ -168,7 +171,7 @@ const DesktopHeader = ({ user, credits }) => (
         </Link>
       )}
 
-      {user?.role === "DOCTOR" && (
+      {role === "DOCTOR" && (
         <Link href="/doctor">
           <Button variant="outline" size="sm">
             Doctor Dashboard
@@ -176,7 +179,7 @@ const DesktopHeader = ({ user, credits }) => (
         </Link>
       )}
 
-      {user?.role === "PATIENT" && (
+      {role === "PATIENT" && (
         <Link href="/appointments">
           <Button variant="outline" size="sm">
             My Appointments
@@ -184,7 +187,7 @@ const DesktopHeader = ({ user, credits }) => (
         </Link>
       )}
 
-      {user?.role === "UNASSIGNED" && (
+      {!role  && (
         <Link href="/onboarding">
           <Button variant="outline" size="sm">
             Complete Profile
