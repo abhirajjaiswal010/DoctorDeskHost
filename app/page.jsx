@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <div className="bg-background overflow-x-hidden ">
       {/* ================= HERO ================= */}
-      <section className="relative min-h-[100svh] pt-15  md:pt-20 ">
+      <section className="relative min-h-[100svh] pt-15  md:pt-25 ">
         <div
           className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20
           flex flex-col-reverse md:flex-row
