@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 "use server"
 import { VerificationStatus } from "@/lib/generated/prisma/enums";
 import { db } from "@/lib/prisma";
@@ -8,11 +9,19 @@ import { addDays, addMinutes, isBefore, endOfDay, format } from "date-fns";
 import { auth } from "@clerk/nextjs/server";
 
 // Initialize Vonage Video API client
-const vonage = new Vonage({
-  applicationId: process.env.VONAGE_APPLICATION_ID,      // Server-only
-  privateKey: process.env.VONAGE_PRIVATE_KEY.replace(/\\n/g, "\n"),            // Server-only
-});
+// const vonage = new Vonage({
+//   applicationId: process.env.VONAGE_APPLICATION_ID,      // Server-only
+//   privateKey: process.env.VONAGE_PRIVATE_KEY.replace(/\\n/g, "\n"),            // Server-only
+// });
 
+if (!process.env.VONAGE_PRIVATE_KEY) {
+  throw new Error("VONAGE_PRIVATE_KEY is missing in environment variables");
+}
+
+const vonage = new Vonage({
+  applicationId: process.env.VONAGE_APPLICATION_ID,
+  privateKey: process.env.VONAGE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+});
 
 
 export async function getDoctorById(doctorId) {
