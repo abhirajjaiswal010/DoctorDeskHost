@@ -7,15 +7,8 @@ export async function POST(req) {
     /* ---------------- AUTH ---------------- */
     const user = await currentUser();
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
     /* ---------------- BODY ---------------- */
-    const { message } = await req.json();
+    const { message, email: providedEmail, firstName: providedFirstName, lastName: providedLastName } = await req.json();
 
     if (!message) {
       return NextResponse.json(
@@ -24,9 +17,16 @@ export async function POST(req) {
       );
     }
 
-    /* ---------------- CLERK DATA ---------------- */
-    const email = user.primaryEmailAddress?.emailAddress;
-    const name = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+    /* ---------------- RESOLVE SENDER ---------------- */
+    // Prefer Clerk user when available; otherwise use provided name/email from form
+    const email = user?.primaryEmailAddress?.emailAddress || providedEmail;
+    const name = user
+      ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+      : `${providedFirstName || ""} ${providedLastName || ""}`.trim();
+
+    if (!email) {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    }
 
     /* ---------------- MAIL ---------------- */
     const transporter = nodemailer.createTransport({
@@ -44,7 +44,7 @@ export async function POST(req) {
       subject: "📩 New Contact Message",
       html: `
         <h3>New Contact Message</h3>
-        <p><b>Name:</b> ${name}</p>
+        <p><b>Name:</b> ${name || "(not provided)"}</p>
         <p><b>Email:</b> ${email}</p>
         <p><b>Message:</b></p>
         <blockquote>${message}</blockquote>

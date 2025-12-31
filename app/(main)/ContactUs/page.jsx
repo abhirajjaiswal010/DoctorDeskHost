@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useUser, SignInButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { Mail, Phone, MessageSquare } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,32 +35,19 @@ export default function ContactPage() {
   }, [isLoaded, isSignedIn, user]);
 
   /* ---------------- LOADING STATE ---------------- */
-  if (!isLoaded) return null;
-
-  /* ---------------- NOT LOGGED IN ---------------- */
-  if (!isSignedIn) {
-    return (
-      <section className="py-24">
-        <div className="container mx-auto text-center max-w-lg px-6">
-          <h1 className="text-3xl font-bold mb-4">Contact Our Team</h1>
-          <p className="text-muted-foreground mb-6">
-            Please sign in to contact our support team.
-          </p>
-
-          <SignInButton mode="modal">
-            <Button className="bg-client">
-              Sign in to continue
-            </Button>
-          </SignInButton>
-        </div>
-      </section>
-    );
-  }
+  // Render immediately (don't block while Clerk loads). If the user is signed in
+  // Clerk will fill the form via the effect above.
 
   /* ---------------- SUBMIT ---------------- */
   const handleSubmit = async () => {
-    if (!form.message) {
-      toast.error("Message is required");
+    if (!form.firstName || !form.email || !form.message) {
+      toast.error("Name, email and message are required");
+      return;
+    }
+
+    // basic email check
+    if (!form.email.includes("@")) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -70,16 +57,23 @@ export default function ContactPage() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: form.message }),
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          message: form.message,
+        }),
       });
 
       if (res.ok) {
         toast.success("Message sent successfully 📩");
         setForm((prev) => ({ ...prev, message: "" }));
       } else {
-        toast.error("Something went wrong");
+        const data = await res.json().catch(() => ({}));
+        toast.error(data?.error || "Something went wrong");
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error("Server error. Try again later.");
     } finally {
       setLoading(false);
@@ -110,11 +104,24 @@ export default function ContactPage() {
 
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <Input value={form.firstName} disabled />
-                <Input value={form.lastName} disabled />
+                <Input
+                  placeholder="First name"
+                  value={form.firstName}
+                  onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                />
+                <Input
+                  placeholder="Last name"
+                  value={form.lastName}
+                  onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                />
               </div>
 
-              <Input type="email" value={form.email} disabled />
+              <Input
+                type="email"
+                placeholder="Email address"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
 
               <Textarea
                 rows={4}

@@ -148,7 +148,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/ContactUs"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-client"
