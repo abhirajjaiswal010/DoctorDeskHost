@@ -8,13 +8,15 @@ export async function POST(req) {
     const user = await currentUser();
 
     /* ---------------- BODY ---------------- */
-    const { message, email: providedEmail, firstName: providedFirstName, lastName: providedLastName } = await req.json();
+    const {
+      message,
+      email: providedEmail,
+      firstName: providedFirstName,
+      lastName: providedLastName,
+    } = await req.json();
 
     if (!message) {
-      return NextResponse.json(
-        { error: "Message required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Message required" }, { status: 400 });
     }
 
     /* ---------------- RESOLVE SENDER ---------------- */

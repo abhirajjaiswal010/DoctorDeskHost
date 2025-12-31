@@ -84,18 +84,16 @@ export default function ContactPage() {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-6 lg:px-20">
-
         {/* Heading */}
         <div className="text-center mb-14">
           <h1 className="text-4xl font-bold">Contact Our Team</h1>
           <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            Have questions about online professional sessions, credits, or appointments?
-            Our team is here to help you.
+            Have questions about online professional sessions, credits, or
+            appointments? Our team is here to help you.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-10 max-w-5xl mx-auto">
-
           {/* FORM */}
           <Card>
             <CardHeader>
@@ -107,12 +105,16 @@ export default function ContactPage() {
                 <Input
                   placeholder="First name"
                   value={form.firstName}
-                  onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, firstName: e.target.value })
+                  }
                 />
                 <Input
                   placeholder="Last name"
                   value={form.lastName}
-                  onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, lastName: e.target.value })
+                  }
                 />
               </div>
 
@@ -127,9 +129,7 @@ export default function ContactPage() {
                 rows={4}
                 placeholder="Tell us how we can help you..."
                 value={form.message}
-                onChange={(e) =>
-                  setForm({ ...form, message: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
               />
 
               <Button
@@ -166,8 +166,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold">Email</h3>
                   <p className="text-sm text-client mt-1">
-                   doctordeskOfficial@gmail.com
-                   doctordesk.team@gmail.com
+                    doctordeskOfficial@gmail.com doctordesk.team@gmail.com
                   </p>
                 </div>
               </CardContent>
@@ -181,9 +180,7 @@ export default function ContactPage() {
                   <p className="text-sm text-muted-foreground">
                     Mon – Fri, 9am to 6pm
                   </p>
-                  <p className="text-sm text-client mt-1">
-                    +91 81094-24356
-                  </p>
+                  <p className="text-sm text-client mt-1">+91 81094-24356</p>
                 </div>
               </CardContent>
             </Card>
@@ -195,22 +192,28 @@ export default function ContactPage() {
               <CardTitle>Company Details</CardTitle>
             </CardHeader>
             <CardContent className="grid md:grid-cols-2 gap-6 text-sm">
-                <div>
-                    <h4 className="font-semibold text-foreground">Registered Entity</h4>
-                    <p className="text-muted-foreground mt-1">DoctorDesk</p>
-                </div>
-                 <div>
-                    <h4 className="font-semibold text-foreground">Business Type</h4>
-                    <p className="text-muted-foreground mt-1">SaaS / IT Services</p>
-                </div>
-                 <div>
-                    <h4 className="font-semibold text-foreground">Platform Category</h4>
-                    <p className="text-muted-foreground mt-1">Appointment Booking & Practice Management Software</p>
-                </div>
-                 <div>
-                    <h4 className="font-semibold text-foreground">Support Email</h4>
-                    <p className="text-client mt-1">support@doctordesk.co.in</p>
-                </div>
+              <div>
+                <h4 className="font-semibold text-foreground">
+                  Registered Entity
+                </h4>
+                <p className="text-muted-foreground mt-1">DoctorDesk</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Business Type</h4>
+                <p className="text-muted-foreground mt-1">SaaS / IT Services</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">
+                  Platform Category
+                </h4>
+                <p className="text-muted-foreground mt-1">
+                  Appointment Booking & Practice Management Software
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Support Email</h4>
+                <p className="text-client mt-1">support@doctordesk.co.in</p>
+              </div>
             </CardContent>
           </Card>
         </div>
