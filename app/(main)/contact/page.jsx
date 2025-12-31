@@ -160,6 +160,7 @@ export default function ContactPage() {
                   <h3 className="font-semibold">Email</h3>
                   <p className="text-sm text-client mt-1">
                    doctordeskOfficial@gmail.com
+                   doctordesk.team@gmail.com
                   </p>
                 </div>
               </CardContent>

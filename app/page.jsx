@@ -88,7 +88,7 @@ export default function Home() {
           aspect-square relative reveal"
           >
             <Image
-              src="/main_img2.png"
+              src="/heroimg.png"
               alt="Doctor consultation"
               fill
               priority
