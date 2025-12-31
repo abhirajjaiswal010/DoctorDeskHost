@@ -116,12 +116,12 @@ export default function OnboardingPage() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card
-          className="border-emerald-900/20 hover:border-emerald-700/40 cursor-pointer transition-all"
+          className="border-emerald-900/20 hover:border-client/40 cursor-pointer transition-all"
           onClick={handlePatientSelection}
         >
           <CardContent className="pt-6 pb-6 flex flex-col items-center text-center">
             <div className="p-4 bg-emerald-900/20 rounded-full mb-4">
-              <User className="h-8 w-8 text-emerald-400" />
+              <User className="h-8 w-8 text-client" />
             </div>
             <CardTitle className="text-xl font-semibold text-white mb-2">
               Join as a Patient
@@ -131,7 +131,7 @@ export default function OnboardingPage() {
               healthcare journey
             </CardDescription>
             <Button
-              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700"
+              className="w-full mt-2 bg-client hover:bg-client"
               disabled={loading}
             >
               {loading ? (
@@ -152,7 +152,7 @@ export default function OnboardingPage() {
         >
           <CardContent className="pt-6 pb-6 flex flex-col items-center text-center">
             <div className="p-4 bg-emerald-900/20 rounded-full mb-4">
-              <Stethoscope className="h-8 w-8 text-emerald-400" />
+              <Stethoscope className="h-8 w-8 text-client" />
             </div>
             <CardTitle className="text-xl font-semibold text-white mb-2">
               Join as a Doctor
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
               provide consultations
             </CardDescription>
             <Button
-              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700"
+              className="w-full mt-2 bg-client hover:bg-emerald-700"
               disabled={loading}
             >
               Continue as Doctor
