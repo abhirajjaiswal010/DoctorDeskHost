@@ -1,4 +1,3 @@
-
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -19,8 +18,8 @@ const inter = Poppins({
 });
 
 export const metadata = {
-  title: "DoctorDesk – Appointment Booking & Practice Management Software",
-  description: "DoctorDesk is a SaaS-based appointment booking and practice management platform that helps independent professionals manage scheduling, sessions, and workflow through secure software tools.",
+  title: "DoctorDesk",
+  description: "create by Abhi_Anshu_Ansh",
 };
 
 export default async function RootLayout({ children }) {
@@ -68,7 +67,7 @@ export default async function RootLayout({ children }) {
           </ThemeProvider>
 
           {/* Razorpay Checkout Script */}
-          <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+
         </body>
       </html>
     </ClerkProvider>

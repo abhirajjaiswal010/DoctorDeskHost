@@ -6,7 +6,7 @@ import { Check, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 import { useCredits } from "@/context/CreditsContext";
-import { useAuth, SignInButton } from "@clerk/nextjs";
+import { useAuth, useUser, SignInButton } from "@clerk/nextjs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
@@ -32,8 +32,9 @@ export default function Pricing() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+  const { user } = useUser();
+
   const handleBuy = async (plan) => {
-    // Extra safety (UI already handles login)
     if (!isSignedIn) {
       toast.error("Please sign in first", {
         description: "Login is required to purchase credits",
@@ -42,94 +43,70 @@ export default function Pricing() {
     }
 
     setLoading(plan.id);
-    paymentCompletedRef.current = false;
 
     try {
-      /* ---------------- CREATE ORDER ---------------- */
-      const res = await fetch("/api/razorpay/orders/create", {
+      const txnid = "txn_" + new Date().getTime();
+      const productinfo = plan.id;
+      const amount = plan.price;
+      const firstname = user?.firstName || "User";
+      const email = user?.primaryEmailAddress?.emailAddress || "test@test.com";
+      const phone = "9999999999"; // PayU requires phone, use dummy if not available or ask user. 
+      // Using dummy for now as Clerk might not have phone.
+
+      // 1. Generate Hash
+      const res = await fetch("/api/payu/hash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: plan.price,
-          planId: plan.id,
-          credits: plan.credits,
+        body: JSON.stringify({ 
+            txnid, 
+            amount, 
+            productinfo, 
+            firstname, 
+            email,
+            udf1: plan.credits,
+            udf2: user.id
         }),
       });
 
-      if (!res.ok) throw new Error("Order creation failed");
+      const data = await res.json();
+      if (!data.hash) throw new Error("Hash generation failed");
 
-      const order = await res.json();
+      // 2. Submit to PayU using a hidden form
+      const payuUrl = "https://test.payu.in/_payment"; // Use https://secure.payu.in/_payment for PROD
 
-      /* ---------------- RAZORPAY OPTIONS ---------------- */
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: "INR",
-        order_id: order.id,
-        name: "DoctorDesk",
-        description: "Platform Usage Fee – DoctorDesk SaaS Subscription",
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = payuUrl;
 
-        /* ✅ PAYMENT SUCCESS */
-        handler: async (response) => {
-          paymentCompletedRef.current = true;
-
-          const verifyRes = await fetch("/api/razorpay/orders/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
-          });
-
-          if (!verifyRes.ok) {
-            toast.error("Payment verification failed");
-            setLoading(null);
-            return;
-          }
-
-          const data = await verifyRes.json();
-
-          if (data?.creditsAdded) {
-            setCredits((prev) => prev + data.creditsAdded);
-          }
-
-          toast.success("Payment Successful 🎉", {
-            description: `${data.creditsAdded} credits added to your account`,
-          });
-
-          setLoading(null);
-        },
-
-        /* ❌ USER CLOSES PAYMENT WINDOW */
-        modal: {
-          ondismiss: () => {
-            if (!paymentCompletedRef.current) {
-              toast.error("Payment cancelled", {
-                description: "You closed the payment window",
-              });
-              setLoading(null);
-            }
-          },
-        },
-
-        theme: { color: "#6ba49f" },
+      const fields = {
+        key: process.env.NEXT_PUBLIC_PAYU_KEY || "gtKFFx",
+        txnid,
+        amount,
+        productinfo,
+        firstname,
+        email,
+        phone,
+        surl: `${window.location.origin}/api/payu/callback`,
+        furl: `${window.location.origin}/api/payu/callback`,
+        hash: data.hash,
+        udf1: plan.credits, // Passing credits here
+        udf2: user.id, // Passing user ID here
       };
 
-      const rzp = new window.Razorpay(options);
+      for (const key in fields) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+      }
 
-      /* ❌ PAYMENT FAILED */
-      rzp.on("payment.failed", () => {
-        if (!paymentCompletedRef.current) {
-          toast.error("Payment failed", {
-            description: "Please try again",
-          });
-          setLoading(null);
-        }
-      });
+      document.body.appendChild(form);
+      form.submit();
 
-      rzp.open();
     } catch (err) {
-      toast.error("Something went wrong", {
-        description: "Unable to start payment",
-      });
+      console.error(err);
+      toast.error("Payment Error", { description: "Could not initiate payment" });
       setLoading(null);
     }
   };

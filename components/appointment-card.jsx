@@ -205,15 +205,15 @@ export function AppointmentCard({
     }
   }, [tokenData, appointment.id, router]);
 
-  // Determine if appointment is active (within 30 minutes of start time)
+  // Determine if appointment is active (within 2 minutes of start time)
   const isAppointmentActive = () => {
     const now = new Date();
     const appointmentTime = new Date(appointment.startTime);
     const appointmentEndTime = new Date(appointment.endTime);
 
-    // Can join 30 minutes before start until end time
+    // Can join 2 minutes before start until end time
     return (
-      (appointmentTime.getTime() - now.getTime() <= 30 * 60 * 1000 &&
+      (appointmentTime.getTime() - now.getTime() <= 2 * 60 * 1000 &&
         now < appointmentTime) ||
       (now >= appointmentTime && now <= appointmentEndTime)
     );
@@ -433,7 +433,7 @@ export function AppointmentCard({
                       <Video className="h-4 w-4 mr-2 " />
                       {isAppointmentActive()
                         ? "Join Video Call"
-                        : "Video call will be available 30 minutes before appointment"}
+                        : "Video call will be available 2 minutes before appointment"}
                     </>
                   )}
                 </Button>
