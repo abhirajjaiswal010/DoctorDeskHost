@@ -115,8 +115,9 @@ export function VerifiedDoctors({ doctors }) {
                               {doctor.name}
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                              {doctor.specialty} • {doctor.experience} years
-                              experience
+                              {doctor.specialty} {doctor.qualifications && doctor.qualifications.length > 0 && (
+                                <span className="text-emerald-600/80 font-medium">({doctor.qualifications.join(", ")})</span>
+                              )} • {doctor.experience} years experience
                             </p>
                             <p className="text-sm text-muted-foreground mt-1">
                               {doctor.email}

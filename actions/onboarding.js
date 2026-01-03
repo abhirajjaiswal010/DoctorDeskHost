@@ -171,6 +171,8 @@ export async function setUserRole(formData) {
   // ---------------- DOCTOR ----------------
   const specialty = formData.get("specialty")?.toString();
   const phone = formData.get("phone")?.toString();
+  const qualificationsRaw = formData.get("qualifications");
+  const qualifications = qualificationsRaw ? JSON.parse(qualificationsRaw) : [];
   const credentialUrl = formData.get("credentialUrl")?.toString();
   const description = formData.get("description")?.toString();
   const experience = Number(formData.get("experience"));
@@ -178,6 +180,7 @@ export async function setUserRole(formData) {
   if (
     !specialty ||
     !phone ||
+    !qualifications ||
     !credentialUrl ||
     !description ||
     isNaN(experience)
@@ -191,6 +194,7 @@ export async function setUserRole(formData) {
       role: "DOCTOR",
       specialty,
       phone,
+      qualifications,
       credentialUrl,
       description,
       experience,

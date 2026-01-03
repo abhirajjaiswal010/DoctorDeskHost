@@ -96,21 +96,23 @@ const [patientInfo, setPatientInfo] = useState({
                   )}
                 </div>
 
-                <h2 className="text-xl font-bold text-client mb-1">
+                <h2 className="text-2xl font-extrabold text-client mb-2 tracking-tight">
                   Dr. {doctor.name}
                 </h2>
 
                 <Badge
                   variant="outline"
-                  className="bg-emerald-900/20 border-emerald-900/30 text-emerald-400 mb-4"
+                  className="bg-emerald-900/10 border-emerald-900/20 text-emerald-600 font-semibold px-4 py-1.5 mb-4 text-center h-auto"
                 >
-                  {doctor.specialty}
+                  {doctor.specialty} {doctor.qualifications && doctor.qualifications.length > 0 && (
+                    <span className="block text-[10px] opacity-80 mt-0.5 font-medium italic">({doctor.qualifications.join(", ")})</span>
+                  )}
                 </Badge>
 
-                <div className="flex items-center justify-center mb-2">
-                  <Medal className="h-4 w-4 text-emerald-400 mr-2" />
-                  <span className="text-muted-foreground">
-                    {doctor.experience} years experience
+                <div className="flex items-center justify-center p-2.5 bg-emerald-50/80 border border-emerald-100 rounded-xl mb-2">
+                  <Medal className="h-4 w-4 text-emerald-500 mr-2" />
+                  <span className="text-sm font-bold text-slate-700">
+                    {doctor.experience} Years of Expertise
                   </span>
                 </div>
 
