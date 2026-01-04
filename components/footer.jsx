@@ -86,7 +86,9 @@ export default function Footer() {
               <div className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-client shrink-0 mt-0.5" />
                 <p>
-                  First Floor, Plot No. 17, Above New Globas Medical, Opposite Satish Kirana, Gori Nagar, New Gouri Nagar, Sukhliya, Indore, Madhya Pradesh – 452010
+                  First Floor, Plot No. 17, Above New Globas Medical, Opposite
+                  Satish Kirana, Gori Nagar, New Gouri Nagar, Sukhliya, Indore,
+                  Madhya Pradesh – 452010
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -231,6 +233,9 @@ export default function Footer() {
             <Link href="/shipping-and-delivery" className="hover:text-client">
               Shipping
             </Link>
+            <Link href="/cancellation-policy" className="hover:text-client">
+              Cancellation
+            </Link>
             <Link href="/refund-policy" className="hover:text-client">
               Refunds
             </Link>
@@ -238,10 +243,9 @@ export default function Footer() {
         </div>
         <div className="container mx-auto px-6 lg:px-20 py-4 text-xs text-muted-foreground text-center border-t border-border/60 flex flex-col items-center gap-2">
           <p>
-            <strong>Company Name:</strong> DoctorDesk |{" "}
-            <strong>Owner:</strong> Dr. Ankit Chourasiya |{" "}
-            <strong>Business Type:</strong> Individual / Proprietorship |{" "}
-            <strong>Service Type:</strong> SaaS / IT Services
+            <strong>Company Name:</strong> DoctorDesk | <strong>Owner:</strong>{" "}
+            Dr. Ankit Chourasiya | <strong>Business Type:</strong> Individual /
+            Proprietorship | <strong>Service Type:</strong> SaaS / IT Services
           </p>
           <p>
             <strong>Support:</strong> doctordeskOfficial@gmail.com
