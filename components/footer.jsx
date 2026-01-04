@@ -223,16 +223,16 @@ export default function Footer() {
           <span>© {new Date().getFullYear()} DoctorDesk</span>
           <div className="flex gap-4">
             <Link href="/privacy-policy" className="hover:text-client">
-              Privacy
+              Privacy-Policy
             </Link>
             <Link href="/terms-and-conditions" className="hover:text-client">
-              Terms
+              Terms & Conditions
             </Link>
             <Link href="/shipping-and-delivery" className="hover:text-client">
               Shipping
             </Link>
             <Link href="/refund-policy" className="hover:text-client">
-              Refunds
+             Returns & Refunds 
             </Link>
           </div>
         </div>
