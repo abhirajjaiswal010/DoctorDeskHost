@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, Wallet, Clock, Lock } from "lucide-react";
+import { Check, Sparkles, Wallet, Clock, Lock, Smartphone } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
@@ -74,8 +74,7 @@ function PaymentHistory({ refreshTrigger }) {
 }
 
 export default function Pricing({ showHistory = true }) {
-  const [loading, setLoading] = useState(null);
-  const { credits, loading: creditsLoading, setCredits } = useCredits();
+  const { credits, loading: creditsLoading } = useCredits();
   const { isSignedIn } = useAuth();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -83,8 +82,6 @@ export default function Pricing({ showHistory = true }) {
   const showPanel = showWalletParam || pathname === "/pricing";
   const [isMobile, setIsMobile] = useState(false);
 
-  // Prevent cancel toast after success
-  const paymentCompletedRef = useRef(false);
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -100,6 +97,26 @@ export default function Pricing({ showHistory = true }) {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  // --- UPI CONFIGURATION ---
+  const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "7067266784-2@ybl";
+  const MERCHANT_NAME = process.env.NEXT_PUBLIC_MERCHANT_NAME || "ANSHU RATHORE";
+
+  const handleUPIPayment = () => {
+    if (!selectedPlan) return;
+    const note = `Payment for ${selectedPlan.credits} Credits by ${user?.fullName || 'User'}`;
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${selectedPlan.price}&cu=INR&tn=${encodeURIComponent(note)}`;
+    window.location.href = upiLink;
+  };
+
+  const copyToClipboard = async (text, label) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(`${label} copied!`, { icon: '📋' });
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  };
 
   const handleBuy = (plan) => {
     if (!isSignedIn) {
@@ -160,7 +177,7 @@ export default function Pricing({ showHistory = true }) {
       const message = `Hello, I have paid ₹${selectedPlan.price} for ${selectedPlan.credits} Credits via ${paymentMethod}.\nTransaction ID: ${transactionId || 'N/A'}`;
       const url = `https://wa.me/917067266784?text=${encodeURIComponent(message)}`;
       window.open(url, "_blank");
-      setIsDialogOpen(false); // Optional: close dialog after sending
+      setIsDialogOpen(false); 
   };
 
   return (
@@ -221,18 +238,11 @@ export default function Pricing({ showHistory = true }) {
                 <div className="relative group">
                     <div className="w-56 h-56 bg-white p-2 rounded-xl border-2 shadow-sm flex items-center justify-center relative overflow-hidden">
                         <img 
-                            src="/qr-code.png" 
+                            src="/anshu-qr.jpg" 
                             alt="Payment QR Code" 
                             className="w-full h-full object-contain mix-blend-multiply" 
-                            onError={(e) => {
-                                e.target.style.display='none';
-                                e.target.nextSibling.style.display='flex';
-                            }}
                         />
-                        <div className="hidden w-full h-full flex-col items-center justify-center text-center gap-2 bg-gray-50">
-                            <span className="text-3xl">📱</span>
-                            <span className="text-sm font-medium text-gray-500">QR Code Here</span>
-                        </div>
+                      
                         {/* Corner accents */}
                         <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-primary rounded-tl-lg"/>
                         <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-primary rounded-tr-lg"/>
@@ -240,8 +250,25 @@ export default function Pricing({ showHistory = true }) {
                         <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-primary rounded-br-lg"/>
                     </div>
                     <div className="text-center mt-3 space-y-2">
-                        <p className="text-[13px] font-bold text-slate-800">Pay to: <span className="text-primary uppercase">DoctorDesk</span></p>
-                        <p className="text-[12px] font-semibold text-slate-600">UPI ID: <span className="text-primary select-all">doctordesk@upi</span></p>
+                        {isMobile && (
+                            <div className="pb-4">
+                                <Button 
+                                    onClick={handleUPIPayment}
+                                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold h-12 rounded-xl shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                >
+                                    <Smartphone className="w-5 h-5" />
+                                    Pay ₹{selectedPlan?.price} via UPI App
+                                </Button>
+                                <p className="text-[10px] text-muted-foreground mt-2 font-medium">Auto-prefills Amount & Details</p>
+                            </div>
+                        )}
+                        <p className="text-[13px] font-bold text-slate-800">Pay to: <span className="text-primary uppercase">{MERCHANT_NAME}</span></p>
+                        <div className="flex items-center justify-center gap-2">
+                            <p className="text-[12px] font-semibold text-slate-600">UPI ID: <span className="text-primary select-all">{UPI_ID}</span></p>
+                            <button onClick={() => copyToClipboard(UPI_ID, "UPI ID")} className="p-1 hover:bg-slate-100 rounded shadow-sm">
+                                <Check className="w-3 h-3 text-slate-400" />
+                            </button>
+                        </div>
                         <div className="flex items-center justify-center gap-4 pt-1 opacity-60">
                              <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe" className="h-4 w-auto"/>
                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1024px-Google_Pay_Logo.svg.png?20221017164555" alt="GPay" className="h-4 w-auto"/>
@@ -251,42 +278,20 @@ export default function Pricing({ showHistory = true }) {
                     </div>
                 </div>
 
-                <div className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-4">
-                    <div className="pl-1">
-                        <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Instruction To Pay</h4>
-                    </div>
-                    
-                    <div className="space-y-2.5">
-                         {[
-                            "Scan QR or pay using UPI ID",
-                            "Enter exact amount shown",
-                            "Complete payment & copy UTR",
-                            "Upload payment screenshot"
-                         ].map((step, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                                <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">
-                                    {i + 1}
-                                </div>
-                                <p className="text-[11px] font-medium text-slate-600">{step}</p>
+                <div className="w-full space-y-2.5">
+                     {[
+                        isMobile ? "Click 'Pay via UPI App' above" : "Scan QR or pay using UPI ID",
+                        "Complete payment & copy UTR",
+                        "Upload payment screenshot",
+                        "Enter Transaction ID below"
+                     ].map((step, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                            <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary shrink-0">
+                                {i + 1}
                             </div>
-                         ))}
-                    </div>
-
-                    <div className="pt-3 border-t border-slate-200 space-y-2">
-                        <div className="flex items-center gap-4 py-1">
-                            <div className="flex items-center gap-2 text-slate-400">
-                                <Lock className="w-3 h-3" />
-                                <span className="text-[9px] font-bold uppercase tracking-wide">Secure</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-slate-400">
-                                <Clock className="w-3 h-3" />
-                                <span className="text-[9px] font-bold uppercase tracking-wide">24h Verified</span>
-                            </div>
+                            <p className="text-[11px] font-medium text-slate-600">{step}</p>
                         </div>
-                        <p className="text-[10px] text-slate-500 leading-relaxed italic pl-1">
-                            * credits will be added after manual verification. Non-refundable once credits are used.
-                        </p>
-                    </div>
+                     ))}
                 </div>
 
                 <div className="w-full space-y-5 bg-card border-black p-4 rounded-lg border">
@@ -355,7 +360,6 @@ export default function Pricing({ showHistory = true }) {
       </Dialog>
 
 
-      {/* Current balance (signed-in users) or when explicitly requested via ?showWallet=1 */}
       {showPanel && (isSignedIn || showWalletParam) && (
         <div className="mb-6 flex items-center justify-center">
           <div
@@ -412,21 +416,21 @@ export default function Pricing({ showHistory = true }) {
                 plan={plan}
                 isSignedIn={isSignedIn}
                 handleBuy={handleBuy}
-                loading={loading}
+                loading={null}
               />
             </SwiperSlide>
           ))}
         </Swiper>
       ) : (
         // 🔹 Desktop: Grid
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan) => (
             <PricingCard
               plan={plan}
               key={plan.id}
-      isSignedIn={isSignedIn}
+              isSignedIn={isSignedIn}
               handleBuy={handleBuy}
-              loading={loading}
+              loading={null}
             />
           ))}
         </div>
@@ -477,7 +481,7 @@ function PricingCard({ plan, isSignedIn, handleBuy, loading }) {
                 : "bg-[#6ba49f]/90 hover:bg-[#6ba49f]"
             }`}
           >
-        {loading === plan.id ? "Processing..." : `Buy Now - Total ₹${plan.price} ${plan.currency}`}
+        {loading === plan.id ? "Processing..." : `Buy ${plan.id}`}
           </Button>
         ) : (
           <SignInButton

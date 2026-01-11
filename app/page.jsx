@@ -16,6 +16,7 @@ import SpotlightCard from "@/components/ui/SpotlightCard";
 import Counter from "@/components/Counter";
 import TestimonialMarquee from "@/components/TestimonialMarquee";
 import HeroCarousel from "@/components/HeroCarousel";
+import { NewsCarousel } from "@/components/news-carousel";
 
 import Feature from "@/components/Feature";
 
@@ -168,6 +169,10 @@ export default function Home() {
             </div>
           </div>
         </div> */}
+      </section>
+
+      <section className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20 mt-10">
+        <NewsCarousel />
       </section>
 
       <Feature features={features} />

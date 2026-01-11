@@ -247,3 +247,17 @@ model PaymentRequest {
   processedAt   DateTime?
   processedBy   String?
 }
+
+// ==========================
+// NEWS & BANNERS MODEL
+// ==========================
+model News {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?  @db.Text
+  imageUrl  String?
+  link      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

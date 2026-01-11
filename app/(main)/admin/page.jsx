@@ -13,11 +13,13 @@ import { AdminBlogs } from "./components/admin-blogs";
 import { LabsManager } from "./components/labs-manager";
 import { PaymentRequests } from "./components/payment-requests";
 import { getLabs } from "@/actions/labs";
+import { getNews } from "@/actions/news";
 
 import { TabAnimatedContent } from "./components/tab-animated-content";
+import { NewsManager } from "./components/news-manager";
 
 export default async function AdminPage() {
-  const [pendingDoctorsData, verifiedDoctorsData, pendingPayoutsData, blogsData, labsData, paymentData] =
+  const [pendingDoctorsData, verifiedDoctorsData, pendingPayoutsData, blogsData, labsData, paymentData, newsData] =
     await Promise.all([
       getPendingDoctors(),
       getVerifiedDoctors(),
@@ -25,6 +27,7 @@ export default async function AdminPage() {
       getAllBlogs(),
       getLabs(),
       getPaymentRequests(),
+      getNews(),
     ]);
 
   return (
@@ -59,6 +62,12 @@ export default async function AdminPage() {
       <TabsContent value="blogs" className="border-none p-0">
         <TabAnimatedContent>
           <AdminBlogs blogs={blogsData.blogs || []} />
+        </TabAnimatedContent>
+      </TabsContent>
+
+      <TabsContent value="news" className="border-none p-0">
+        <TabAnimatedContent>
+          <NewsManager news={newsData.data || []} />
         </TabAnimatedContent>
       </TabsContent>
 

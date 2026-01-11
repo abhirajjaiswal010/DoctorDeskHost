@@ -22,6 +22,7 @@ export function AdminTabsSection({ children }) {
     { value: "doctors", label: "Doctors", icon: Users },
     { value: "payouts", label: "Payouts", icon: CreditCard },
     { value: "payment-requests", label: "Payments", icon: Wallet },
+    { value: "news", label: "News/Banners", icon: BookOpen },
     { value: "blogs", label: "Blogs", icon: BookOpen },
     { value: "labs", label: "Labs", icon: FlaskConical },
   ];

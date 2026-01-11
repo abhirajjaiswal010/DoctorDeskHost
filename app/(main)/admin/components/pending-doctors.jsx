@@ -84,13 +84,13 @@ export function PendingDoctors({ doctors }) {
               {doctors.map((doctor) => (
                 <Card
                   key={doctor.id}
-                  className="bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
+                  className="bg-card border-emerald-900/20 hover:border-emerald-700/30 transition-all"
                 >
                   <CardContent className="p-4">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
-                        <div className="bg-muted/20 rounded-full p-2">
-                          <User className="h-5 w-5 text-emerald-400" />
+                        <div className="bg-client/30 rounded-full p-2">
+                          <User className="h-5 w-5 text-client" />
                         </div>
                           <div className="flex flex-col gap-1">
                             <h3 className="font-bold text-client text-lg">
@@ -108,7 +108,7 @@ export function PendingDoctors({ doctors }) {
                       <div className="flex items-center gap-2 self-end md:self-auto">
                         <Badge
                           variant="outline"
-                          className="bg-amber-900/20 border-amber-900/30 text-amber-400"
+                          className=" border-amber-900/30 text-amber-400"
                         >
                           Pending
                         </Badge>
@@ -116,7 +116,7 @@ export function PendingDoctors({ doctors }) {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewDetails(doctor)}
-                          className="border-emerald-900/30 hover:bg-muted/80"
+                          className="border-client bg-card hover:bg-client hover:text-white"
                         >
                           View Details
                         </Button>
