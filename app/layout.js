@@ -21,6 +21,35 @@ const inter = Poppins({
 export const metadata = {
   title: "DoctorDesk",
   description: "DoctorDesk is a secure scheduling and workflow platform for independent professionals.",
+  icons: {
+    icon: [
+      {
+        url: "/favicon-light.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-dark.png",
+        media: "(prefers-color-scheme: light)",
+      },
+    ],
+    shortcut: [
+      {
+        url: "/favicon-light.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-dark.png",
+        media: "(prefers-color-scheme: light)",
+      },
+    ],
+    apple: [
+      {
+        url: "/favicon-light.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default async function RootLayout({ children }) {
