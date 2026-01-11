@@ -181,7 +181,7 @@ export default function ContactPage() {
                     Mon – Fri, 9am to 6pm
                   </p>
                   {/* <p className="text-sm text-client mt-1">+91 81094-24356</p> */}
-                  <p className="text-sm text-client mt-1">+91 79871-09645</p>
+                  <p className="text-sm text-client mt-1">+91 81094-24356</p>
                 </div>
               </CardContent>
             </Card>
