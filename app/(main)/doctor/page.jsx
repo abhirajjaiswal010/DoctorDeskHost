@@ -8,7 +8,7 @@ import { DoctorEarnings } from "./_components/doctor-earnings";
 import { DoctorTabsSection } from "./_components/doctor-tabs-section";
 import { TabAnimatedContent } from "@/components/tab-animated-content";
 import { TabsContent } from "@/components/ui/tabs";
-import { NewsCarousel } from "@/components/news-carousel";
+
 
 export default async function DoctorDashboardPage() {
   const user = await getCurrentUser();
@@ -33,7 +33,7 @@ export default async function DoctorDashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <NewsCarousel />
+
       <DoctorTabsSection>
         <TabsContent value="sessions" className="border-none p-0">
           <TabAnimatedContent>
