@@ -17,11 +17,102 @@ const inter = Poppins({
   subsets: ["latin"],
 });
 
+/* =========================
+   SEO / METADATA (ONLY ADD)
+   ========================= */
 export const metadata = {
-  title: "DoctorDesk",
+  title: {
+    default: "DoctorDesk",
+    template: "%s | DoctorDesk",
+  },
   description:
-    "DoctorDesk is a secure scheduling and workflow platform for independent professionals.",
+    "DoctorDesk is a smart clinic and patient management platform for modern healthcare professionals, enabling online doctor appointments, digital patient records, scheduling, billing, and seamless clinic workflows in one secure system.",
+  keywords: [
+   // Brand
+  "DoctorDesk",
+  "Doctor Desk",
+
+  // Core product
+  "doctor appointment app",
+  "online doctor appointment",
+  "clinic management software",
+  "patient management system",
+  "doctor scheduling software",
+  "healthcare workflow platform",
+
+  // Comparison / intent-based (Practo / Apollo type)
+  "online doctor consultation app",
+  "doctor booking app like practo",
+  "apollo 24/7 doctor appointment app",
+  "practo online doctor appointment",
+  "best doctor appointment app in india",
+
+  // Feature based
+  "appointment booking for doctors",
+  "clinic appointment management",
+  "medical practice management software",
+  "healthcare saas platform",
+  "digital clinic software",
+
+  // Geo / market
+  "doctor appointment app india",
+  "online clinic management india",
+  ],
+  metadataBase: new URL("https://doctordesk.co.in"),
+
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+
+  openGraph: {
+    title: "DoctorDesk",
+    description:
+      "Smart clinic & patient management platform for modern healthcare professionals.",
+    url: "https://doctordesk.co.in",
+    siteName: "DoctorDesk",
+    images: [
+      {
+        url: "https://doctordesk.co.in/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "DoctorDesk Logo",
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "DoctorDesk",
+    description:
+      "Secure scheduling and workflow platform for doctors & clinics.",
+    images: ["https://doctordesk.co.in/logo.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
 };
+
+export const viewport = {
+  themeColor: "#6ba49f",
+};
+
+/* ========================= */
 
 export default async function RootLayout({ children }) {
   const user = await checkUser(); // server-side
@@ -43,7 +134,6 @@ export default async function RootLayout({ children }) {
     >
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-
           {/* 🔥 Google Analytics */}
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-GXCHKJRJ01"
@@ -78,8 +168,6 @@ export default async function RootLayout({ children }) {
               </PageLoader>
             </CreditsProvider>
           </ThemeProvider>
-
-          {/* Razorpay Checkout Script */}
         </body>
       </html>
     </ClerkProvider>

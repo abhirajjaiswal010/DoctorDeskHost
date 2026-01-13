@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, Wallet, Clock, Lock, Smartphone, Clipboard } from "lucide-react";
+import { Check, Sparkles, Wallet, Clock, Lock, Smartphone, Clipboard, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
@@ -238,11 +238,19 @@ Kindly confirm once received. Thank you.`;
             </div>
           ) : (
             <>
-              <DialogHeader className="space-y-3">
+              <DialogHeader className="space-y-0 ">
                 <DialogTitle className="text-center text-xl">Complete Payment</DialogTitle>
                 <DialogDescription className="text-center">
                   Scan the QR code to pay <span className="font-bold text-primary text-lg">₹{selectedPlan?.price}</span>
                 </DialogDescription>
+
+                {/* UPI Warning Alert */}
+                <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-md text-xs ">
+                  <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" />
+                  <p>
+                    <span className="font-bold">Note:</span> If "Pay via UPI" link fails, take a screenshot of this QR code and scan it from your UPI app.
+                  </p>
+                </div>
               </DialogHeader>
 
               <div className="flex flex-col items-center gap-6 py-2">
@@ -272,7 +280,7 @@ Kindly confirm once received. Thank you.`;
                     <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-primary rounded-bl-lg" />
                     <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-primary rounded-br-lg" />
                   </div>
-                  <div className="text-center mt-3 space-y-2">
+                  <div className="text-center mt-2 space-y-0">
                     {isMobile && (
                       <div className="pb-4">
                         <Button
@@ -282,7 +290,7 @@ Kindly confirm once received. Thank you.`;
                           <Smartphone className="w-5 h-5" />
                           Pay ₹{selectedPlan?.price} via UPI App
                         </Button>
-                        <p className="text-[10px] text-muted-foreground mt-2 font-medium">Auto-prefills Amount & Details</p>
+                        {/* <p className="text-[10px] text-muted-foreground mt-2 font-medium">Auto-prefills Amount & Details</p> */}
                       </div>
                     )}
                     <p className="text-[13px] font-bold text-slate-800">Pay to: <span className="text-primary uppercase">{MERCHANT_NAME}</span></p>
@@ -293,7 +301,7 @@ Kindly confirm once received. Thank you.`;
                       </button>
                     </div>
                     <div className="flex items-center justify-center gap-4 pt-1 opacity-60">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe" className="h-4 w-auto" />
+                      {/* <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe" className="h-4 w-auto" /> */}
                       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1024px-Google_Pay_Logo.svg.png?20221017164555" alt="GPay" className="h-4 w-auto" />
                       <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" alt="Paytm" className="h-3 w-auto" />
                       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/UPI_logo.svg/330px-UPI_logo.svg.png" alt="UPI" className="h-2.5 w-auto" />
@@ -364,7 +372,7 @@ Kindly confirm once received. Thank you.`;
                 </div>
               </div>
 
-              <DialogFooter className="gap-2 sm:gap-3">
+              <DialogFooter className="gap-2 sm:gap-1">
                 <Button type="button" variant="outline" className="border border-black" onClick={() => setIsDialogOpen(false)} disabled={isSubmitLoading}>
                   Cancel
                 </Button>
