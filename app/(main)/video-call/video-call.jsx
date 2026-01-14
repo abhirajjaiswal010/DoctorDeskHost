@@ -19,7 +19,7 @@ import PrescriptionForm from "@/components/PrescriptionForm";
 import { getAppointmentById } from "@/actions/appointments";
 import PrescriptionModal from "@/components/prescriptionModal";
 
-export default function VideoCall({ sessionId, token, appointmentEndTime, appointmentId }) {
+export default function VideoCall({ sessionId, token, appointmentEndTime, appointmentId, appointmentStartTime }) {
   const [isLoading, setIsLoading] = useState(true);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -30,10 +30,12 @@ export default function VideoCall({ sessionId, token, appointmentEndTime, appoin
   const [remoteUser, setRemoteUser] = useState(null);
   const [countdown, setCountdown] = useState(null); // 30 → 0
   const [sessionDuration, setSessionDuration] = useState(0); // in seconds
+  const [sessionTimer, setSessionTimer] = useState(""); // Display string
+  const [timerType, setTimerType] = useState("waiting"); // waiting | active | ended
   const [sessionEnded, setSessionEnded] = useState(false);
   const [appointment, setAppointment] = useState(null);
 
-const [showPrescription, setShowPrescription] = useState(false);
+  const [showPrescription, setShowPrescription] = useState(false);
 
   const sessionRef = useRef(null);
   const publisherRef = useRef(null);
@@ -43,17 +45,17 @@ const [showPrescription, setShowPrescription] = useState(false);
   const appId = process.env.NEXT_PUBLIC_VONAGE_APPLICATION_ID;
 
   useEffect(() => {
-  async function fetchAppointment() {
-    try {
-      const data = await getAppointmentById(appointmentId);
-      setAppointment(data);
-    } catch (err) {
-      toast.error(err.message || "Failed to load appointment");
+    async function fetchAppointment() {
+      try {
+        const data = await getAppointmentById(appointmentId);
+        setAppointment(data);
+      } catch (err) {
+        toast.error(err.message || "Failed to load appointment");
+      }
     }
-  }
 
-  fetchAppointment();
-}, [getAppointmentById]);
+    fetchAppointment();
+  }, [getAppointmentById]);
   useEffect(() => {
     if (!isConnected) return;
 
@@ -68,7 +70,7 @@ const [showPrescription, setShowPrescription] = useState(false);
 
   // useEffect(() => {
   //   if (!appointmentEndTime) return;
-  
+
 
   //   const endTime = new Date(appointmentEndTime).getTime();
   //   const now = Date.now();
@@ -106,62 +108,60 @@ const [showPrescription, setShowPrescription] = useState(false);
   //     clearTimeout(endTimer);
   //   };
   // }, [appointmentEndTime]);
+  // Timer Effect
   useEffect(() => {
-  if (!appointmentEndTime || !isConnected) return;
+    if (!appointmentEndTime || !appointmentStartTime) return;
 
-  const endTime = new Date(appointmentEndTime).getTime();
-  const now = Date.now();
-  const timeUntilEnd = endTime - now;
-  const warningTime = timeUntilEnd - 30 * 1000;
+    const calculateTime = () => {
+      const start = new Date(appointmentStartTime).getTime();
+      const end = new Date(appointmentEndTime).getTime();
+      const now = Date.now();
 
-  let warningTimeout;
-  let countdownInterval;
-  let endTimeout;
+      // Case 1: Session hasn't started yet (Buffer time)
+      if (now < start) {
+        const diff = Math.ceil((start - now) / 1000);
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        setSessionTimer(`Starts in: ${minutes}:${seconds.toString().padStart(2, "0")}`);
+        setTimerType("waiting");
+      }
+      // Case 2: Session is live
+      else if (now >= start && now < end) {
+        const diff = Math.ceil((end - now) / 1000);
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+        setSessionTimer(`Time Remaining: ${minutes}:${seconds.toString().padStart(2, "0")}`);
+        setTimerType("active");
 
-  // 30s warning
-  if (warningTime > 0) {
-    warningTimeout = setTimeout(() => {
-      toast.warning("Session will end in 30 seconds");
-
-      // Start live countdown
-      let secondsLeft = 30;
-      setCountdown(secondsLeft);
-
-      countdownInterval = setInterval(() => {
-        secondsLeft -= 1;
-        setCountdown(secondsLeft);
-
-        if (secondsLeft <= 0) {
-          clearInterval(countdownInterval);
-          setCountdown(null);
+        // 30s Warning
+        if (diff <= 30 && diff > 0 && countdown === null) {
+          toast.warning("Session will end in 30 seconds");
+          setCountdown(diff);
         }
-      }, 1000);
+      }
+      // Case 3: Session Ended
+      else {
+        setSessionTimer("Session Ended");
+        setTimerType("ended");
+        setSessionEnded(true);
+        if (sessionRef.current) sessionRef.current.disconnect();
 
-    }, warningTime);
-  }
+        if (userRole === "DOCTOR") {
+          setShowPrescription(true);
+        } else {
+          router.push("/appointments");
+        }
+      }
+    };
 
-  // Session end
-  if (timeUntilEnd > 0) {
-    endTimeout = setTimeout(() => {
-      toast.error("Session ended");
-      if (sessionRef.current) sessionRef.current.disconnect();
-      setSessionEnded(true)
+    // Run immediately
+    calculateTime();
 
+    // Update every second
+    const interval = setInterval(calculateTime, 1000);
 
-    if (userRole === "DOCTOR") {
-      setShowPrescription(true); // Show modal
-    } else {
-      router.push("/appointments"); // Patient redirect
-    }
-    }, timeUntilEnd);
-  }
-
-  return () => {
-    clearTimeout(warningTimeout);
-    clearTimeout(endTimeout);
-    clearInterval(countdownInterval);
-  };
-}, [appointmentEndTime, isConnected]);
+    return () => clearInterval(interval);
+  }, [appointmentEndTime, appointmentStartTime, userRole, router, countdown]);
 
   // Handle script load
   const handleScriptLoad = () => {
@@ -310,10 +310,10 @@ const [showPrescription, setShowPrescription] = useState(false);
     }
 
     if (userRole === "DOCTOR") {
-    setShowPrescription(true); // Show modal
-  } else {
-    router.push("/appointments"); // Patient redirect
-  }
+      setShowPrescription(true); // Show modal
+    } else {
+      router.push("/appointments"); // Patient redirect
+    }
   };
 
   // Cleanup on unmount
@@ -346,7 +346,7 @@ const [showPrescription, setShowPrescription] = useState(false);
       </div>
     );
   }
-  
+
 
   return (
     <>
@@ -358,13 +358,13 @@ const [showPrescription, setShowPrescription] = useState(false);
           setIsLoading(false);
         }}
       />
-{showPrescription && (
-  <PrescriptionModal
-    appointment={appointment}
-    doctor={{ name: userName, id: userRole }}
-    onClose={() => setShowPrescription(false)}
-  />
-)}
+      {showPrescription && (
+        <PrescriptionModal
+          appointment={appointment}
+          doctor={{ name: userName, id: userRole }}
+          onClose={() => setShowPrescription(false)}
+        />
+      )}
 
 
       <div className="container mx-auto px-4 py-8">
@@ -376,37 +376,28 @@ const [showPrescription, setShowPrescription] = useState(false);
             {isConnected
               ? "Connected"
               : isLoading
-              ? "Connecting..."
-              : "Connection failed"}
+                ? "Connecting..."
+                : "Connection failed"}
           </p>
         </div>
         <div className="text-center mb-2">
-  {sessionDuration > 0 && (
-    <p className="text-sm text-gray-500">
-      Session Time: {Math.floor(sessionDuration / 60)
-        .toString()
-        .padStart(2, "0")}:
-      {(sessionDuration % 60).toString().padStart(2, "0")}
-    </p>
-  )}
-
-  {countdown !== null && (
-    <p className="text-sm text-red-500 font-bold">
-      Ending in: {countdown}s
-    </p>
-  )}
-</div>
+          <p className={`text-lg font-bold ${timerType === "active" ? "text-green-600" :
+              timerType === "waiting" ? "text-yellow-600" : "text-red-600"
+            }`}>
+            {sessionTimer}
+          </p>
+        </div>
 
         {isLoading && !scriptLoaded ? (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="h-12 w-12 text-emerald-400 animate-spin mb-4" />
-             <p className="text-black text-lg">
-            Connecting to video call...
-          </p>
+            <p className="text-black text-lg">
+              Connecting to video call...
+            </p>
 
-          <p className="mt-3 text-sm text-yellow-500 text-center">
-            If the call takes too long, please refresh the page.
-          </p>
+            <p className="mt-3 text-sm text-yellow-500 text-center">
+              If the call takes too long, please refresh the page.
+            </p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -454,11 +445,10 @@ const [showPrescription, setShowPrescription] = useState(false);
                 variant="outline"
                 size="lg"
                 onClick={toggleVideo}
-                className={`rounded-full p-4 h-14 w-14 ${
-                  isVideoEnabled
-                    ? "border-emerald-900/30"
-                    : "bg-red-900/20 border-red-900/30 text-red-400"
-                }`}
+                className={`rounded-full p-4 h-14 w-14 ${isVideoEnabled
+                  ? "border-emerald-900/30"
+                  : "bg-red-900/20 border-red-900/30 text-red-400"
+                  }`}
                 disabled={!publisherRef.current}
               >
                 {isVideoEnabled ? <Video /> : <VideoOff />}
@@ -468,11 +458,10 @@ const [showPrescription, setShowPrescription] = useState(false);
                 variant="outline"
                 size="lg"
                 onClick={toggleAudio}
-                className={`rounded-full p-4 h-14 w-14 ${
-                  isAudioEnabled
-                    ? "border-emerald-900/30"
-                    : "bg-red-900/20 border-red-900/30 text-red-400"
-                }`}
+                className={`rounded-full p-4 h-14 w-14 ${isAudioEnabled
+                  ? "border-emerald-900/30"
+                  : "bg-red-900/20 border-red-900/30 text-red-400"
+                  }`}
                 disabled={!publisherRef.current}
               >
                 {isAudioEnabled ? <Mic /> : <MicOff />}

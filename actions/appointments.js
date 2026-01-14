@@ -55,7 +55,7 @@ export async function getDoctorById(doctorId) {
 
 export async function getAvailableTimeSlots(doctorId) {
 
-    const Slot_duration=10;
+    const Slot_duration=2;
   try {
     // Validate doctor existence and verification
     const doctor = await db.user.findUnique({

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { HashLoader } from "react-spinners";
 
 export default function PageLoader({ children }) {
   const [loading, setLoading] = useState(true);
@@ -12,8 +13,8 @@ export default function PageLoader({ children }) {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
-        <div className="w-16 h-16 border-4 border-client border-t-transparent rounded-full animate-spin"></div>
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-background z-50">
+        <HashLoader color="#6ba49f" size={60} />
       </div>
     );
   }

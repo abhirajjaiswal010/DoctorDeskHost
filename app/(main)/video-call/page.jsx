@@ -18,6 +18,7 @@ export default async function VideoCallPage({ searchParams }) {
     where: { id: appointmentId },
     select: {
       endTime: true,
+      startTime: true, // ✅ Fetch start time
       doctor: {
         select: { name: true },
       },
@@ -36,6 +37,7 @@ export default async function VideoCallPage({ searchParams }) {
     <VideoCall
       sessionId={sessionId}
       token={token}
+      appointmentStartTime={appointment.startTime} // ✅ Pass start time
       appointmentEndTime={appointment.endTime}
       appointmentId={appointmentId}
       doctorName={appointment.doctor?.name || "Doctor"} // fallback

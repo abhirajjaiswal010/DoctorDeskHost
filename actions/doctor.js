@@ -158,6 +158,47 @@ export async function getDoctorAppointments() {
   }
 }
 
+export async function getRecentDoctorAppointments() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    const doctor = await db.user.findUnique({
+      where: {
+        clerkUserId: userId,
+        role: "DOCTOR",
+      },
+    });
+
+    if (!doctor) {
+      throw new Error("Doctor not found");
+    }
+
+    const appointments = await db.appointment.findMany({
+      where: {
+        doctorId: doctor.id,
+        status: {
+          in: ["COMPLETED", "CANCELLED"],
+        },
+      },
+      include: {
+        patient: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take: 5,
+    });
+
+    return { appointments };
+  } catch (error) {
+    throw new Error("Failed to fetch recent appointments " + error.message);
+  }
+}
+
 export async function cancelAppointment(formData) {
   const { userId } = await auth();
 

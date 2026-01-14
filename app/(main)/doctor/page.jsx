@@ -1,8 +1,9 @@
-import { getDoctorAppointments, getDoctorAvailability } from "@/actions/doctor";
+import { getDoctorAppointments, getDoctorAvailability, getRecentDoctorAppointments } from "@/actions/doctor";
 import AvailabilitySettings from "./_components/availability-settings";
 import { getCurrentUser } from "@/actions/onboarding";
 import { redirect } from "next/navigation";
 import DoctorAppointmentsList from "./_components/appointments-list";
+import RecentAppointmentsList from "./_components/recent-appointments-list";
 import { getDoctorEarnings, getDoctorPayouts } from "@/actions/payout";
 import { DoctorEarnings } from "./_components/doctor-earnings";
 import { DoctorTabsSection } from "./_components/doctor-tabs-section";
@@ -13,12 +14,13 @@ import { TabsContent } from "@/components/ui/tabs";
 export default async function DoctorDashboardPage() {
   const user = await getCurrentUser();
 
-  const [appointmentsData, availabilityData, earningsData, payoutsData] =
+  const [appointmentsData, availabilityData, earningsData, payoutsData, recentAppointmentsData] =
     await Promise.all([
       getDoctorAppointments(),
       getDoctorAvailability(),
       getDoctorEarnings(),
       getDoctorPayouts(),
+      getRecentDoctorAppointments(),
     ]);
 
   //   // Redirect if not a doctor
@@ -39,6 +41,9 @@ export default async function DoctorDashboardPage() {
           <TabAnimatedContent>
             <DoctorAppointmentsList
               appointments={appointmentsData.appointments || []}
+            />
+            <RecentAppointmentsList
+              appointments={recentAppointmentsData.appointments || []}
             />
           </TabAnimatedContent>
         </TabsContent>

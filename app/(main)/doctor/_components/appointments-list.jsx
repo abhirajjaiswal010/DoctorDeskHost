@@ -6,6 +6,7 @@ import { AppointmentCard } from "@/components/appointment-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import useFetch from "@/hooks/use-fetch";
+import { HashLoader } from "react-spinners";
 
 export default function DoctorAppointmentsList() {
   const {
@@ -30,8 +31,8 @@ export default function DoctorAppointmentsList() {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">Loading sessions...</p>
+          <div className="text-center py-8 flex justify-center">
+            <HashLoader color="#6ba49f" size={50} />
           </div>
         ) : appointments.length > 0 ? (
           <div className="space-y-4">
