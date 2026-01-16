@@ -209,7 +209,7 @@ export default async function RootLayout({ children }) {
             disableTransitionOnChange
           >
             <CreditsProvider initialCredits={0}>
-              <PageLoader>
+              <PageLoader user={user}>
                 <Header user={user} />
 
                 <Toaster richColors position="top-center" />
