@@ -82,25 +82,25 @@ export function LabsManager({ labs }) {
         toast.error(result.error);
       }
     } catch (error) {
-       toast.error("An unexpected error occurred");
+      toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   }
 
   async function handleDelete(id) {
-     if(!confirm("Are you sure you want to delete this lab?")) return;
-     
-     try{
-         const result = await deleteLab(id);
-         if(result.success){
-             toast.success("Lab deleted successfully");
-         } else {
-             toast.error(result.error);
-         }
-     } catch(err){
-         toast.error("Failed to delete lab");
-     }
+    if (!confirm("Are you sure you want to delete this lab?")) return;
+
+    try {
+      const result = await deleteLab(id);
+      if (result.success) {
+        toast.success("Lab deleted successfully");
+      } else {
+        toast.error(result.error);
+      }
+    } catch (err) {
+      toast.error("Failed to delete lab");
+    }
   }
 
   return (
@@ -193,7 +193,7 @@ export function LabsManager({ labs }) {
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                   <FormField
+                  <FormField
                     control={form.control}
                     name="timings"
                     render={({ field }) => (
@@ -231,31 +231,31 @@ export function LabsManager({ labs }) {
       </CardHeader>
       <CardContent>
         {labs.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No labs found. Add one to get started.</div>
+          <div className="text-center py-8 text-muted-foreground">No labs found. Add one to get started.</div>
         ) : (
-            <div className="space-y-4">
+          <div className="space-y-4">
             {labs.map((lab) => (
-                <div
+              <div
                 key={lab.id}
                 className="flex items-center justify-between p-4 border rounded-lg"
-                >
+              >
                 <div className="space-y-1">
-                    <h3 className="font-semibold">{lab.name}</h3>
-                    <div className="flex items-center text-sm text-muted-foreground space-x-4">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-1"/> {lab.address}</span>
-                        <span className="flex items-center"><Star className="w-3 h-3 mr-1 text-orange-400"/> {lab.rating} ({lab.reviews})</span>
-                    </div>
-                     <div className="flex items-center text-sm text-muted-foreground space-x-4">
-                        <span className="flex items-center"><Clock className="w-3 h-3 mr-1"/> {lab.timings}</span>
-                        <span className="flex items-center"><IndianRupee className="w-3 h-3 mr-1"/> {lab.price}</span>
-                    </div>
+                  <h3 className="font-semibold">{lab.name}</h3>
+                  <div className="flex items-center text-sm text-muted-foreground space-x-4">
+                    <span className="flex items-center"><MapPin className="w-3 h-3 mr-1" /> {lab.address}</span>
+                    <span className="flex items-center"><Star className="w-3 h-3 mr-1 text-orange-400" /> {lab.rating} ({lab.reviews})</span>
+                  </div>
+                  <div className="flex items-center text-sm text-muted-foreground space-x-4">
+                    <span className="flex items-center"><Clock className="w-3 h-3 mr-1" /> {lab.timings}</span>
+                    <span className="flex items-center"><IndianRupee className="w-3 h-3 mr-1" /> {lab.price}</span>
+                  </div>
                 </div>
                 <Button variant="destructive" size="sm" onClick={() => handleDelete(lab.id)}>
-                    <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
-                </div>
+              </div>
             ))}
-            </div>
+          </div>
         )}
       </CardContent>
     </Card>

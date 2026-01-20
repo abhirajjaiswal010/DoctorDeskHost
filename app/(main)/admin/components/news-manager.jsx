@@ -64,10 +64,10 @@ export function NewsManager({ news: initialNews = [] }) {
     }
 
     setIsLoading(true);
-    const data = { 
+    const data = {
       title: "Banner", // Default title since we removed the field
-      imageUrl, 
-      isActive 
+      imageUrl,
+      isActive
     };
 
     try {
@@ -157,8 +157,8 @@ export function NewsManager({ news: initialNews = [] }) {
             <CardContent className="p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Switch 
-                    checked={item.isActive} 
+                  <Switch
+                    checked={item.isActive}
                     onCheckedChange={() => handleToggleStatus(item.id, item.isActive)}
                   />
                   <span className="text-sm font-medium">{item.isActive ? 'Active' : 'Inactive'}</span>
@@ -180,14 +180,14 @@ export function NewsManager({ news: initialNews = [] }) {
         ))}
 
         {newsList.length === 0 && (
-            <div className="col-span-full py-12 flex flex-col items-center justify-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 text-center">
-                <div className="bg-gray-100 p-4 rounded-full mb-4">
-                    <Megaphone className="w-8 h-8 text-gray-400" />
-                </div>
-                <h3 className="font-bold text-gray-600">No news or banners yet</h3>
-                <p className="text-gray-400 text-sm max-w-xs mx-auto mb-6">Create your first news update or advertisement to show it on user dashboards.</p>
-                <Button onClick={() => handleOpenDialog()} className="bg-client">Create Banner Now</Button>
+          <div className="col-span-full py-12 flex flex-col items-center justify-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 text-center">
+            <div className="bg-gray-100 p-4 rounded-full mb-4">
+              <Megaphone className="w-8 h-8 text-gray-400" />
             </div>
+            <h3 className="font-bold text-gray-600">No news or banners yet</h3>
+            <p className="text-gray-400 text-sm max-w-xs mx-auto mb-6">Create your first news update or advertisement to show it on user dashboards.</p>
+            <Button onClick={() => handleOpenDialog()} className="bg-client">Create Banner Now</Button>
+          </div>
         )}
       </div>
 

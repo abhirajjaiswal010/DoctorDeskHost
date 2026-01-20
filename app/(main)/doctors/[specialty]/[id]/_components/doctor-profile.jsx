@@ -36,12 +36,12 @@ export function DoctorProfile({ doctor, availableDays }) {
   const [showBooking, setShowBooking] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [patientInfo, setPatientInfo] = useState({
-  name: "",
-  phone: "",
-  age: "",
-  gender: "",
-});
+  const [patientInfo, setPatientInfo] = useState({
+    name: "",
+    phone: "",
+    age: "",
+    gender: "",
+  });
 
   const router = useRouter();
 
@@ -65,8 +65,8 @@ const [patientInfo, setPatientInfo] = useState({
 
   const handleSlotSelect = (slot) => {
     setSelectedSlot(slot);
-  setIsModalOpen(true);
-   
+    setIsModalOpen(true);
+
   };
 
   const handleBookingComplete = () => {

@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const AvailabilitySettings = ({slots}) => {
-    const [showForm, setShowForm] = useState(false);
+const AvailabilitySettings = ({ slots }) => {
+  const [showForm, setShowForm] = useState(false);
 
   // Custom hook for server actions
   const { loading, fn: submitSlots, data } = useFetch(setAvailabilitySlots);
@@ -33,7 +33,7 @@ const AvailabilitySettings = ({slots}) => {
   });
 
 
-   function createLocalDateFromTime(timeStr) {
+  function createLocalDateFromTime(timeStr) {
     const [hours, minutes] = timeStr.split(":").map(Number);
     const now = new Date();
     const date = new Date(
@@ -70,17 +70,17 @@ const AvailabilitySettings = ({slots}) => {
 
   const handleDelete = async (id) => {
     toast("Delete this time slot?", {
-        action: {
-          label: "Remove",
-          onClick: async () => {
-              try {
-                  await removeSlot(id);
-                  toast.success("Time slot removed");
-              } catch (error) {
-                  toast.error("Failed to remove slot");
-              }
-          },
+      action: {
+        label: "Remove",
+        onClick: async () => {
+          try {
+            await removeSlot(id);
+            toast.success("Time slot removed");
+          } catch (error) {
+            toast.error("Failed to remove slot");
+          }
         },
+      },
     });
   };
 
@@ -135,28 +135,28 @@ const AvailabilitySettings = ({slots}) => {
                     >
                       <div className="flex items-center">
                         <div className=" p-2 rounded-full mr-3">
-                            <Clock className="h-4 w-4 text-client" />
+                          <Clock className="h-4 w-4 text-client" />
                         </div>
                         <div>
-                            <p className="text-black font-medium">
+                          <p className="text-black font-medium">
                             {formatTimeString(slot.startTime)} -{" "}
                             {formatTimeString(slot.endTime)}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
+                          </p>
+                          <p className="text-xs text-muted-foreground">
                             {slot.status === "BOOKED" ? "Booked" : "Available"}
-                            </p>
+                          </p>
                         </div>
                       </div>
-                      
+
                       {slot.status === "AVAILABLE" && (
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                            onClick={() => handleDelete(slot.id)}
-                            disabled={deleting}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => handleDelete(slot.id)}
+                          disabled={deleting}
                         >
-                            <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       )}
                     </div>

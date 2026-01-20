@@ -248,7 +248,7 @@ export default function Footer() {
           <span>© {new Date().getFullYear()} DoctorDesk</span>
           <p>
             <strong>Company Name:</strong> DoctorDesk | <strong>Owner:</strong>{" "}
-        Dr. Ankit Chourasiya | <strong>Business Type:</strong> Individual /
+            Dr. Ankit Chourasiya | <strong>Business Type:</strong> Individual /
             Proprietorship | <strong>Service Type:</strong> SaaS / IT Services
           </p>
           <p>

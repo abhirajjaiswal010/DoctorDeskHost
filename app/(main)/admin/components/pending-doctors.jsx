@@ -92,18 +92,18 @@ export function PendingDoctors({ doctors }) {
                         <div className="bg-client/30 rounded-full p-2">
                           <User className="h-5 w-5 text-client" />
                         </div>
-                          <div className="flex flex-col gap-1">
-                            <h3 className="font-bold text-client text-lg">
-                              {doctor.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              <span className="font-semibold text-emerald-600">{doctor.specialty}</span>
-                              {doctor.qualifications && doctor.qualifications.length > 0 && (
-                                <span className="text-slate-500 ml-1">({doctor.qualifications.join(", ")})</span>
-                              )}
-                              <span className="ml-2 border-l pl-2 text-slate-400">{doctor.experience} years experience</span>
-                            </p>
-                          </div>
+                        <div className="flex flex-col gap-1">
+                          <h3 className="font-bold text-client text-lg">
+                            {doctor.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            <span className="font-semibold text-emerald-600">{doctor.specialty}</span>
+                            {doctor.qualifications && doctor.qualifications.length > 0 && (
+                              <span className="text-slate-500 ml-1">({doctor.qualifications.join(", ")})</span>
+                            )}
+                            <span className="ml-2 border-l pl-2 text-slate-400">{doctor.experience} years experience</span>
+                          </p>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2 self-end md:self-auto">
                         <Badge

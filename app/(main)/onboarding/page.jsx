@@ -44,7 +44,7 @@ export default function OnboardingPage() {
     resolver: zodResolver(doctorFormSchema),
     defaultValues: {
       specialty: "",
-      phone:undefined,
+      phone: undefined,
       qualifications: "",
       experience: undefined,
       credentialUrl: "",
@@ -100,10 +100,10 @@ export default function OnboardingPage() {
     formData.append("role", "DOCTOR");
     formData.append("specialty", data.specialty);
     formData.append("phone", data.phone);
-   const qualificationsArray = data.qualifications
-    ? data.qualifications.split(",").map((q) => q.trim())
-    : [];
-  formData.append("qualifications", JSON.stringify(qualificationsArray));
+    const qualificationsArray = data.qualifications
+      ? data.qualifications.split(",").map((q) => q.trim())
+      : [];
+    formData.append("qualifications", JSON.stringify(qualificationsArray));
     formData.append("experience", data.experience.toString());
     formData.append("credentialUrl", data.credentialUrl);
     formData.append("description", data.description);
@@ -222,7 +222,7 @@ export default function OnboardingPage() {
               <Input
                 id="experience"
                 type="number"
-                 min={0}
+                min={0}
                 placeholder="e.g. 5"
                 {...register("experience", { valueAsNumber: true })}
               />
@@ -233,17 +233,17 @@ export default function OnboardingPage() {
               )}
             </div>
             <div className="space-y-2">
-  <Label htmlFor="phone">Phone Number</Label>
-  <Input
-    id="phone"
-    type="tel"
-    placeholder="e.g. +91 9876543210"
-    {...register("phone")}
-  />
-  {errors.phone && (
-    <p className="text-sm text-red-500">{errors.phone.message}</p>
-  )}
-</div>
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="e.g. +91 9876543210"
+                {...register("phone")}
+              />
+              {errors.phone && (
+                <p className="text-sm text-red-500">{errors.phone.message}</p>
+              )}
+            </div>
             <div className="space-y-2">
               <Label htmlFor="qualifications">Qualification</Label>
               <Input
