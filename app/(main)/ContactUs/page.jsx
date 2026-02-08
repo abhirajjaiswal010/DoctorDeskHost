@@ -197,12 +197,16 @@ export default function ContactPage() {
                 <h4 className="font-semibold text-foreground">
                   Registered Entity
                 </h4>
-                <p className="text-muted-foreground mt-1">DoctorDesk</p>
+                <p className="text-client mt-1 font-medium">DoctorDesk</p>
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Owner Name</h4>
-                {/* <p className="text-muted-foreground mt-1">Dr. Ankit Chourasiya</p> */}
-                <p className="text-muted-foreground mt-1">Abhiraj Jaiswal</p>
+                <p className="text-client mt-1 font-medium">Dr. Ankit Chourasiya</p>
+                {/* <p className="text-muted-foreground mt-1">Abhiraj Jaiswal</p> */}
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Contact Phone Number</h4>
+                <p className="text-client mt-1">+91 81094-24356</p>
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Business Type</h4>
@@ -212,7 +216,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Service Type</h4>
-                <p className="text-muted-foreground mt-1">SaaS / IT Services</p>
+                <p className="text-client mt-1 font-medium">SaaS / IT Services</p>
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">
@@ -230,15 +234,15 @@ export default function ContactPage() {
                 <h4 className="font-semibold text-foreground">
                   Registered Address
                 </h4>
-                {/* <p className="text-muted-foreground mt-1 text-xs">
+                <p className="text-muted-foreground mt-1 text-xs">
                   First Floor, Plot No. 17, Above New Globas Medical, Opposite
                   Satish Kirana, Gori Nagar, New Gouri Nagar, Sukhliya, Indore,
                   Madhya Pradesh – 452010
-                </p> */}
-                <p className="text-muted-foreground mt-1 text-xs">
+                </p>
+                {/* <p className="text-muted-foreground mt-1 text-xs">
                   513, Vynaktesh Vihar Chota Bangarda Road Indore, Madhya
                   Pradesh – 452005 India
-                </p>
+                </p> */}
               </div>
             </CardContent>
           </Card>

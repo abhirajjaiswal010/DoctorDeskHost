@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Instagram,
@@ -14,6 +15,7 @@ import {
   MailIcon,
   Link2,
   MapPin,
+  User,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -75,23 +77,26 @@ export default function Footer() {
         <div className="relative z-10 container mx-auto px-6 lg:px-20 grid grid-cols-2 md:grid-cols-6 gap-10 text-sm text-muted-foreground">
           {/* Brand */}
           <div className="col-span-2">
-            <h3 className="text-lg font-semibold text-foreground">
-              Doctor<span className="text-client">Desk</span>
-            </h3>
+            <div className="flex items-center ">
+              <Image
+                src="/final-logo.png"
+                alt="DoctorDesk Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+              <h3 className="text-lg font-semibold text-foreground">
+                Doctor<span className="text-client">Desk</span>
+              </h3>
+            </div>
             <p className="mt-3 max-w-sm">
               Online session scheduling made simple, secure, and accessible for
               everyone.
             </p>
             <div className="mt-6 space-y-3 text-xs">
-              <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 text-client shrink-0 mt-0.5" />
-                <p>
-                  First Floor, Plot No. 17, Above New Globas Medical, Opposite
-                  Satish Kirana, Gori Nagar, New Gouri Nagar, Sukhliya, Indore,
-                  Madhya Pradesh – 452010
-                  {/* 513, Vynaktesh Vihar Chota Bangarda Road <br /> Indore, Madhya
-                  Pradesh – 452005 <br /> India */}
-                </p>
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4 text-client shrink-0" />
+                <p>Dr. Ankit Chourasiya</p>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-client shrink-0" />
@@ -101,6 +106,16 @@ export default function Footer() {
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-client shrink-0" />
                 <p>doctordeskofficial@gmail.com</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-client shrink-0 mt-0.5" />
+                <p>
+                  First Floor, Plot No. 17, Above New Globas Medical, Opposite
+                  Satish Kirana, Gori Nagar, New Gouri Nagar, Sukhliya, Indore,
+                  Madhya Pradesh – 452010
+                  {/* 513, Vynaktesh Vihar Chota Bangarda Road <br /> Indore, Madhya
+                  Pradesh – 452005 <br /> India */}
+                </p>
               </div>
             </div>
           </div>
@@ -233,12 +248,12 @@ export default function Footer() {
             <Link href="/terms-and-conditions" className="hover:text-client">
               Terms & Conditions
             </Link>
-            <Link href="/shipping-and-delivery" className="hover:text-client">
+            {/* <Link href="/shipping-and-delivery" className="hover:text-client">
               Shipping
             </Link>
             <Link href="/cancellation-policy" className="hover:text-client">
               Cancellation
-            </Link>
+            </Link> */}
             <Link href="/refund-policy" className="hover:text-client">
               Returns & Refunds
             </Link>
@@ -253,6 +268,9 @@ export default function Footer() {
           </p>
           <p>
             <strong>Support:</strong> doctordeskOfficial@gmail.com
+          </p>
+          <p className="mt-2">
+            <strong>Refund Policy:</strong> If we approve your refund, we will process and credit it to your bank account within 3-5 days.
           </p>
           {/* <p className="mt-2">
             DoctorDesk is a technology platform and does not provide medical
