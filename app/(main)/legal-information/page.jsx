@@ -60,12 +60,12 @@ export default function LegalInformationPage() {
                   Registered Address
                 </h4>
                 <p className="text-muted-foreground">
-               First Floor, Plot No. 17,<br />
-Above New Globas Medical,<br />
-Opposite Satish Kirana,<br />
-Gori Nagar, New Gouri Nagar,<br />
-Sukhliya, Indore,<br />
-Madhya Pradesh – 452010
+                  First Floor, Plot No. 17,<br />
+                  Above New Globas Medical,<br />
+                  Opposite Satish Kirana,<br />
+                  Gori Nagar, New Gouri Nagar,<br />
+                  Sukhliya, Indore,<br />
+                  Madhya Pradesh – 452010
                 </p>
                 {/* <p className="text-muted-foreground">
                   513, Vynaktesh Vihar Chota Bangarda Road Indore, Madhya
