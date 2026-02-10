@@ -150,24 +150,30 @@ export function PaymentRequests({ requests = [], history = [] }) {
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-2">
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                                                    <Eye className="h-4 w-4 text-muted-foreground" />
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent className="max-w-2xl bg-transparent border-none shadow-none p-0 flex flex-col items-center justify-center">
-                                                <DialogHeader className="sr-only"><DialogTitle>Screenshot</DialogTitle></DialogHeader>
-                                                <div className="relative bg-white p-2 rounded-lg shadow-xl overflow-hidden max-h-[85vh]">
-                                                    <img src={req.screenshotUrl} alt="Payment Screenshot" className="object-contain max-h-[80vh] w-auto rounded" />
-                                                    <div className="absolute top-4 right-4 flex gap-2">
-                                                        <Button size="sm" variant="secondary" onClick={() => window.open(req.screenshotUrl, '_blank')}>
-                                                            Open Original
-                                                        </Button>
+                                        {req.screenshotUrl ? (
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                                                        <Eye className="h-4 w-4 text-muted-foreground" />
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="max-w-2xl bg-transparent border-none shadow-none p-0 flex flex-col items-center justify-center">
+                                                    <DialogHeader className="sr-only"><DialogTitle>Screenshot</DialogTitle></DialogHeader>
+                                                    <div className="relative bg-white p-2 rounded-lg shadow-xl overflow-hidden max-h-[85vh]">
+                                                        <img src={req.screenshotUrl} alt="Payment Screenshot" className="object-contain max-h-[80vh] w-auto rounded" />
+                                                        <div className="absolute top-4 right-4 flex gap-2">
+                                                            <Button size="sm" variant="secondary" onClick={() => window.open(req.screenshotUrl, '_blank')}>
+                                                                Open Original
+                                                            </Button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </DialogContent>
-                                        </Dialog>
+                                                </DialogContent>
+                                            </Dialog>
+                                        ) : (
+                                            <div className="w-8 h-8 flex items-center justify-center">
+                                                {/* Placeholder or empty for automatic payments */}
+                                            </div>
+                                        )}
 
                                         {showActions && (
                                             <>

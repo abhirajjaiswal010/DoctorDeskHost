@@ -32,12 +32,93 @@ export async function createPaymentRequest(data) {
        }
      });
      
+
      return { success: true };
   } catch (error) {
     console.error("Error creating payment request:", error);
     return { success: false, error: error.message };
   }
 }
+
+// Create a PhonePe payment request (Pending state)
+export async function createPhonePeRequest(data) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  try {
+     const user = await db.user.findUnique({
+        where: { clerkUserId: userId },
+     });
+     
+     if (!user) throw new Error("User not found");
+
+     const request = await db.paymentRequest.create({
+       data: {
+          userId: user.id,
+          amount: data.amount,
+          credits: data.credits,
+          screenshotUrl: "", // No screenshot for online payment
+          transactionId: data.transactionId,
+          paymentMethod: "PHONEPE",
+          packageId: data.packageId,
+          status: "PENDING"
+       }
+     });
+     
+     return { success: true, id: request.id };
+  } catch (error) {
+    console.error("Error creating PhonePe request:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// Update PhonePe payment status
+export async function updatePhonePeStatus(transactionId, status) {
+  try {
+     console.log(`Updating Payment Status: ${transactionId} -> ${status}`);
+     const request = await db.paymentRequest.findFirst({
+        where: { transactionId: transactionId },
+     });
+
+     if (!request) throw new Error("Request not found");
+     
+     if (request.status === status) return { success: true }; 
+
+     await db.$transaction(async (tx) => {
+        await tx.paymentRequest.update({
+            where: { id: request.id },
+            data: { 
+                status: status,
+                processedAt: new Date(),
+                processedBy: "SYSTEM"
+            }
+        });
+
+        if (status === "APPROVED") {
+             await tx.user.update({
+                where: { id: request.userId },
+                data: { credits: { increment: request.credits } },
+            });
+            
+            await tx.creditTransaction.create({
+                data: {
+                    userId: request.userId,
+                    amount: request.credits,
+                    type: "CREDIT_PURCHASE",
+                    packageId: request.packageId,
+                    transactionId: request.id 
+                }
+            });
+        }
+     });
+
+     return { success: true };
+  } catch (error) {
+     console.error("Error updating PhonePe status:", error);
+     return { success: false, error: error.message };
+  }
+}
+
 
 // Get requests (Pending & History)
 export async function getPaymentRequests() {
