@@ -236,7 +236,7 @@ model PaymentRequest {
   user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   amount        Float
   credits       Int
-  screenshotUrl String
+  screenshotUrl String?
   status        PaymentStatus @default(PENDING)
   transactionId String?
   paymentMethod String?

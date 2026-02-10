@@ -21,6 +21,7 @@ const plans = [
   { id: "BASIC", price: 300, credits: 1, currency: "INR" },
   { id: "STANDARD", price: 600, credits: 2, popular: true, currency: "INR" },
   { id: "PREMIUM", price: 900, credits: 3, currency: "INR" },
+  // { id: "ENTERPRISE", price: 299, credits: 50, currency: "INR" },
 ];
 
 function PaymentHistory({ refreshTrigger }) {
@@ -38,7 +39,7 @@ function PaymentHistory({ refreshTrigger }) {
     fetchHistory();
   }, [refreshTrigger]);
 
-  if (loading) return null;
+  if (loading) return <div className="mt-12 text-center text-sm text-muted-foreground">Loading history...</div>;
   if (history.length === 0) return null;
 
   return (
@@ -74,6 +75,7 @@ export default function Pricing({ showHistory = true }) {
   const { isSignedIn, userId } = useAuth();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const router = useRouter();
   const showWalletParam = searchParams?.get("showWallet") === "1";
   const showPanel = showWalletParam || pathname === "/pricing";
   const [isMobile, setIsMobile] = useState(false);
@@ -170,28 +172,26 @@ export default function Pricing({ showHistory = true }) {
 
       {showPanel && (isSignedIn || showWalletParam) && (
         <div className="mb-6 flex items-center justify-center">
-          <div
-            className="
-      flex items-center gap-3 px-4 py-2
-      rounded-full
-      bg-gradient-to-r from-yellow-100 to-yellow-200
-      border border-yellow-300
-      shadow-sm
-    "
-          >
-            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-yellow-400/30">
-              <Wallet className="w-5 h-5 text-yellow-700" />
+          <div className="
+            flex items-center gap-3 px-4 py-2
+            rounded-full
+            bg-white
+            border border-[#6ba49f]/30
+            shadow-sm
+          ">
+            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[#6ba49f]/10">
+              <Wallet className="w-5 h-5 text-[#6ba49f]" />
             </div>
 
             <div className="text-sm leading-tight">
-              <p className="text-yellow-700 font-medium">Wallet Balance</p>
+              <p className="text-slate-600 font-medium">Wallet Balance</p>
               {isSignedIn ? (
-                <p className="font-semibold text-yellow-900">
-                  {creditsLoading ? "Loading..." : `${credits} credits`}
+                <p className="font-bold text-slate-800">
+                  {creditsLoading ? "..." : `${credits} credits`}
                 </p>
               ) : (
                 <div className="flex items-center gap-3">
-                  <p className="font-semibold text-yellow-900">
+                  <p className="font-semibold text-slate-800">
                     Sign in to view balance
                   </p>
                   <SignInButton
@@ -209,6 +209,7 @@ export default function Pricing({ showHistory = true }) {
           </div>
         </div>
       )}
+
       {isMobile ? (
         // 🔹 Mobile: Swiper
         <Swiper
@@ -252,6 +253,8 @@ export default function Pricing({ showHistory = true }) {
 }
 
 function PricingCard({ plan, isSignedIn, handleBuy, loading }) {
+  const isLoading = loading === plan.id;
+
   return (
     <Card
       className={`relative border-2 transition-all duration-300
@@ -281,11 +284,11 @@ function PricingCard({ plan, isSignedIn, handleBuy, loading }) {
         {isSignedIn ? (
           <Button
             onClick={() => handleBuy(plan)}
-            disabled={loading === plan.id}
+            disabled={!!loading}
             className={`w-full btn-shine text-white ${plan.popular
               ? "bg-[#6ba49f] hover:bg-[#6ba49f]/90"
               : "bg-[#6ba49f]/90 hover:bg-[#6ba49f]"
-              }`}
+              } ${isLoading ? 'opacity-80' : ''}`}
           >
             {loading === plan.id ? (
               <div className="flex items-center gap-2">

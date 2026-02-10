@@ -12706,7 +12706,7 @@ export namespace Prisma {
     userId: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl: string | null
     status: $Enums.PaymentStatus
     transactionId: string | null
     paymentMethod: string | null
@@ -12829,7 +12829,7 @@ export namespace Prisma {
       userId: string
       amount: number
       credits: number
-      screenshotUrl: string
+      screenshotUrl: string | null
       status: $Enums.PaymentStatus
       transactionId: string | null
       paymentMethod: string | null
@@ -15880,7 +15880,7 @@ export namespace Prisma {
     userId?: StringFilter<"PaymentRequest"> | string
     amount?: FloatFilter<"PaymentRequest"> | number
     credits?: IntFilter<"PaymentRequest"> | number
-    screenshotUrl?: StringFilter<"PaymentRequest"> | string
+    screenshotUrl?: StringNullableFilter<"PaymentRequest"> | string | null
     status?: EnumPaymentStatusFilter<"PaymentRequest"> | $Enums.PaymentStatus
     transactionId?: StringNullableFilter<"PaymentRequest"> | string | null
     paymentMethod?: StringNullableFilter<"PaymentRequest"> | string | null
@@ -15898,7 +15898,7 @@ export namespace Prisma {
     userId?: SortOrder
     amount?: SortOrder
     credits?: SortOrder
-    screenshotUrl?: SortOrder
+    screenshotUrl?: SortOrderInput | SortOrder
     status?: SortOrder
     transactionId?: SortOrderInput | SortOrder
     paymentMethod?: SortOrderInput | SortOrder
@@ -15919,7 +15919,7 @@ export namespace Prisma {
     userId?: StringFilter<"PaymentRequest"> | string
     amount?: FloatFilter<"PaymentRequest"> | number
     credits?: IntFilter<"PaymentRequest"> | number
-    screenshotUrl?: StringFilter<"PaymentRequest"> | string
+    screenshotUrl?: StringNullableFilter<"PaymentRequest"> | string | null
     status?: EnumPaymentStatusFilter<"PaymentRequest"> | $Enums.PaymentStatus
     transactionId?: StringNullableFilter<"PaymentRequest"> | string | null
     paymentMethod?: StringNullableFilter<"PaymentRequest"> | string | null
@@ -15937,7 +15937,7 @@ export namespace Prisma {
     userId?: SortOrder
     amount?: SortOrder
     credits?: SortOrder
-    screenshotUrl?: SortOrder
+    screenshotUrl?: SortOrderInput | SortOrder
     status?: SortOrder
     transactionId?: SortOrderInput | SortOrder
     paymentMethod?: SortOrderInput | SortOrder
@@ -15962,7 +15962,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"PaymentRequest"> | string
     amount?: FloatWithAggregatesFilter<"PaymentRequest"> | number
     credits?: IntWithAggregatesFilter<"PaymentRequest"> | number
-    screenshotUrl?: StringWithAggregatesFilter<"PaymentRequest"> | string
+    screenshotUrl?: StringNullableWithAggregatesFilter<"PaymentRequest"> | string | null
     status?: EnumPaymentStatusWithAggregatesFilter<"PaymentRequest"> | $Enums.PaymentStatus
     transactionId?: StringNullableWithAggregatesFilter<"PaymentRequest"> | string | null
     paymentMethod?: StringNullableWithAggregatesFilter<"PaymentRequest"> | string | null
@@ -16903,7 +16903,7 @@ export namespace Prisma {
     id?: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl?: string | null
     status?: $Enums.PaymentStatus
     transactionId?: string | null
     paymentMethod?: string | null
@@ -16921,7 +16921,7 @@ export namespace Prisma {
     userId: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl?: string | null
     status?: $Enums.PaymentStatus
     transactionId?: string | null
     paymentMethod?: string | null
@@ -16937,7 +16937,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16955,7 +16955,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16972,7 +16972,7 @@ export namespace Prisma {
     userId: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl?: string | null
     status?: $Enums.PaymentStatus
     transactionId?: string | null
     paymentMethod?: string | null
@@ -16988,7 +16988,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17005,7 +17005,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19083,7 +19083,7 @@ export namespace Prisma {
     id?: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl?: string | null
     status?: $Enums.PaymentStatus
     transactionId?: string | null
     paymentMethod?: string | null
@@ -19099,7 +19099,7 @@ export namespace Prisma {
     id?: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl?: string | null
     status?: $Enums.PaymentStatus
     transactionId?: string | null
     paymentMethod?: string | null
@@ -19291,7 +19291,7 @@ export namespace Prisma {
     userId?: StringFilter<"PaymentRequest"> | string
     amount?: FloatFilter<"PaymentRequest"> | number
     credits?: IntFilter<"PaymentRequest"> | number
-    screenshotUrl?: StringFilter<"PaymentRequest"> | string
+    screenshotUrl?: StringNullableFilter<"PaymentRequest"> | string | null
     status?: EnumPaymentStatusFilter<"PaymentRequest"> | $Enums.PaymentStatus
     transactionId?: StringNullableFilter<"PaymentRequest"> | string | null
     paymentMethod?: StringNullableFilter<"PaymentRequest"> | string | null
@@ -20311,7 +20311,7 @@ export namespace Prisma {
     id?: string
     amount: number
     credits: number
-    screenshotUrl: string
+    screenshotUrl?: string | null
     status?: $Enums.PaymentStatus
     transactionId?: string | null
     paymentMethod?: string | null
@@ -20535,7 +20535,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20551,7 +20551,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20567,7 +20567,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     credits?: IntFieldUpdateOperationsInput | number
-    screenshotUrl?: StringFieldUpdateOperationsInput | string
+    screenshotUrl?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null

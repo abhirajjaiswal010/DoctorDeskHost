@@ -32,9 +32,9 @@ export default async function PricingPage() {
           Simple, Transparent Pricing
         </h1>
 
-          All payments made on DoctorDesk are for software platform usage, subscription
-          access, and digital tools provided by the platform. DoctorDesk does not collect
-          fees for medical or professional advice.
+        All payments made on DoctorDesk are for software platform usage, subscription
+        access, and digital tools provided by the platform. DoctorDesk does not collect
+        fees for medical or professional advice.
       </div>
 
       {/* Pricing Table Section */}
