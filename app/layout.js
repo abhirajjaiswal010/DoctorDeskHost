@@ -208,7 +208,7 @@ export default async function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            <CreditsProvider initialCredits={0}>
+            <CreditsProvider initialCredits={user?.credits || 0}>
               <PageLoader user={user}>
                 <Header user={user} />
 

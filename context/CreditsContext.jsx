@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 
 const CreditsContext = createContext(null);
 
-export function CreditsProvider({ children }) {
-  const [credits, setCredits] = useState(0);
+export function CreditsProvider({ children, initialCredits = 0 }) {
+  const [credits, setCredits] = useState(initialCredits);
   const [loading, setLoading] = useState(false);
 
   const reloadCredits = useCallback(async () => {
@@ -31,10 +31,11 @@ export function CreditsProvider({ children }) {
     }
   }, []);
 
-  // Load once on mount
+  // Use initialCredits if provided, then fetch latest
   useEffect(() => {
+    if (initialCredits) setCredits(initialCredits);
     reloadCredits();
-  }, [reloadCredits]);
+  }, [reloadCredits, initialCredits]);
 
   const value = useMemo(
     () => ({
