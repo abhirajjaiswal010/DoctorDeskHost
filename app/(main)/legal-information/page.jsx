@@ -31,6 +31,12 @@ export default function LegalInformationPage() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground flex items-center gap-2">
+                    Clinic Name
+                  </h4>
+                  <p className="text-muted-foreground mt-1">Yashoda Dental Care</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground flex items-center gap-2">
                     Owner Name
                   </h4>
                   <p className="text-muted-foreground mt-1">Dr. Ankit Chourasiya</p>

@@ -200,6 +200,12 @@ export default function ContactPage() {
                 <p className="text-client mt-1 font-medium">DoctorDesk</p>
               </div>
               <div>
+                <h4 className="font-semibold text-foreground">
+                  Clinic Name
+                </h4>
+                <p className="text-client mt-1 font-medium">Yashoda Dental Care</p>
+              </div>
+              <div>
                 <h4 className="font-semibold text-foreground">Owner Name</h4>
                 <p className="text-client mt-1 font-medium">Dr. Ankit Chourasiya</p>
                 {/* <p className="text-muted-foreground mt-1">Abhiraj Jaiswal</p> */}
